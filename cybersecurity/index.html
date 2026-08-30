@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ติวสอบ Cyber Security Fundamentals — พื้นฐานความมั่นคงปลอดภัยไซเบอร์</title>
+<meta name="description" content="เว็บติวสอบ Cyber Security Fundamentals แบบ interactive 10 บท พร้อม quiz, flashcards, cheat sheet และการโจมตีแยกตามชั้น OSI">
+
+<!-- Google Fonts: Noto Sans Thai สำหรับภาษาไทย, JetBrains Mono สำหรับโค้ด/ตัวเลข -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+    <script src="../shared/hub-nav.js"></script>
+</head>
+<body>
+
+<!-- ===================== แถบ progress บอกความคืบหน้าการเรียน ===================== -->
+<div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- ===================== HEADER + NAVIGATION ===================== -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-mark">SEC</span>
+      <div class="brand-text">
+        <strong>Cyber Security</strong>
+        <small>ติวสอบ Fundamentals · 10 บท</small>
+      </div>
+    </div>
+
+    <!-- ปุ่มเปิดเมนูบนจอมือถือ -->
+    <button class="icon-btn nav-toggle" id="navToggle" aria-label="เปิดเมนู" aria-expanded="false">
+      <span class="burger"></span>
+    </button>
+
+    <!-- เมนูหลัก — เติมด้วย JS จาก CHAPTERS ใน data.js เพื่อไม่ให้ต้องแก้สองที่ -->
+    <nav class="main-nav" id="mainNav" aria-label="เมนูหลัก"></nav>
+
+    <button class="icon-btn theme-btn" id="themeToggle" aria-label="สลับธีมสว่าง/มืด" title="สลับธีม">
+      <span id="themeIcon">🌙</span>
+    </button>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- ===================== บทที่ 1: พื้นฐาน & แนวคิดหลัก ===================== -->
+  <section class="page is-active" id="basics">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 1</span>
+      <h1>พื้นฐาน &amp; แนวคิดหลักของ Cyber Security</h1>
+      <p class="lead">
+        ก่อนจะไปดูว่าใครโจมตีเราด้วยวิธีไหน ต้องตกลงคำศัพท์ให้ตรงกันก่อน
+        บทนี้ปูสามเรื่องที่ข้อสอบชอบถามมากที่สุด — เราปกป้อง <b>อะไร</b> (CIA Triad),
+        เราควบคุม <b>ใคร</b> (AAA) และคำที่หน้าตาคล้ายกันจนสับสน (Threat / Vulnerability / Risk)
+      </p>
+    </div>
+
+    <div class="card-grid">
+      <article class="card">
+        <h3><span class="ico">🛡️</span> Cyber Security คืออะไร</h3>
+        <p>
+          คือการปกป้องระบบคอมพิวเตอร์ เครือข่าย โปรแกรม และข้อมูล
+          จากการเข้าถึง ใช้งาน เปิดเผย แก้ไข หรือทำลายโดยไม่ได้รับอนุญาต
+        </p>
+        <p class="muted">
+          จุดที่คนมักเข้าใจผิดคือคิดว่ามันเป็นเรื่องของเครื่องมือหรือซอฟต์แวร์อย่างเดียว
+          ความจริงมันประกอบด้วยสามขาเสมอ — <b>People (คน)</b>, <b>Process (กระบวนการ)</b>
+          และ <b>Technology (เทคโนโลยี)</b> ขาที่พังบ่อยที่สุดคือขาแรก
+        </p>
+      </article>
+
+      <article class="card">
+        <h3><span class="ico">🎯</span> ทำไมต้องเรียนเรื่องนี้</h3>
+        <ul class="tick">
+          <li><b>ทุกอย่างต่อเน็ตหมดแล้ว</b> — ตั้งแต่กล้องวงจรปิดถึงระบบควบคุมโรงงาน</li>
+          <li><b>ต้นทุนการโจมตีถูกลง</b> — ผู้โจมตีเช่าเครื่องมือเป็นบริการรายเดือนได้</li>
+          <li><b>ความเสียหายไม่ใช่แค่เงิน</b> — ยังมีเรื่องความเชื่อมั่นและกฎหมายคุ้มครองข้อมูล</li>
+          <li><b>ป้องกันถูกกว่าตามแก้</b> — งบ patch ราคาถูกกว่าค่ากู้ระบบหลังถูก ransomware มาก</li>
+        </ul>
+      </article>
+
+      <article class="card accent">
+        <h3><span class="ico">🔗</span> เชื่อมกับความรู้เครือข่ายเดิม</h3>
+        <p>
+          ถ้าเคยเรียน OSI Model มาแล้ว จะได้เปรียบมากในวิชานี้
+          เพราะการโจมตีเกือบทุกแบบ <b>เกิดขึ้นที่ชั้นใดชั้นหนึ่งของ OSI เสมอ</b>
+        </p>
+        <p class="muted">บทที่ 3 ของเว็บนี้จะพาไล่ทั้ง 7 ชั้นว่าแต่ละชั้นถูกโจมตีอย่างไร และต้องกันที่อุปกรณ์ตัวไหน</p>
+        <button class="btn primary" data-goto="osilayers">ข้ามไปดูบทที่ 3 →</button>
+      </article>
+    </div>
+
+    <h2 class="section-title">ตารางเปรียบเทียบ: Cyber vs Network vs Information Security</h2>
+    <p class="section-sub">สามคำนี้ถูกใช้สลับกันบ่อยมากในชีวิตจริง แต่ในข้อสอบมันมีขอบเขตที่ต่างกันชัดเจน</p>
+    <div class="table-wrap">
+      <table id="secCompareTable">
+        <thead>
+          <tr>
+            <th style="width:22%">ศาสตร์</th>
+            <th style="width:22%">ขอบเขตที่ดูแล</th>
+            <th style="width:22%">ปกป้องอะไร</th>
+            <th style="width:20%">ตัวอย่างมาตรการ</th>
+            <th>ข้อสังเกต</th>
+          </tr>
+        </thead>
+        <tbody><!-- เติมด้วย JS จาก SEC_COMPARE --></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">CIA Triad — สามเสาหลักที่ต้องท่องให้ขึ้นใจ</h2>
+    <p class="section-sub">คลิกที่มุมใดมุมหนึ่งของสามเหลี่ยม เพื่อดูคำอธิบายและเหตุการณ์จริงที่เสานั้นล้มเหลว</p>
+    <div class="cia-wrap">
+      <div id="ciaTriangle"><!-- SVG สามเหลี่ยม สร้างด้วย JS --></div>
+      <div class="cia-detail" id="ciaDetail"><!-- รายละเอียดของมุมที่เลือก --></div>
+    </div>
+    <div class="card-grid tight" style="margin-top:18px">
+      <article class="card">
+        <h3><span class="ico">➕</span> หลักเสริมที่มักถูกถามต่อ</h3>
+        <ul class="tick" id="ciaExtra"></ul>
+      </article>
+      <article class="card">
+        <h3><span class="ico">⚖️</span> สามเสานี้ขัดกันเองได้</h3>
+        <p class="muted">
+          เพิ่ม Confidentiality ด้วยการเข้ารหัสหนัก ๆ และบังคับยืนยันตัวตนหลายชั้น
+          มักทำให้ Availability ลดลง (ใช้งานยากขึ้น ช้าลง)
+          งานของทีมความปลอดภัยคือหา <b>จุดสมดุล</b> ที่เหมาะกับความเสี่ยงขององค์กรนั้น
+          ไม่ใช่ดันสุดทางด้านใดด้านหนึ่ง
+        </p>
+      </article>
+    </div>
+
+    <h2 class="section-title">AAA + Non-repudiation — อธิบายด้วยสถานการณ์ธนาคาร</h2>
+    <p class="section-sub">ทั้งสี่คำนี้เป็นคนละขั้นตอนกัน ลองไล่ตามลำดับการใช้แอปธนาคารหนึ่งครั้ง</p>
+    <div class="aaa-grid" id="aaaGrid"></div>
+
+    <h2 class="section-title">คำที่มักสับสน: Threat vs Vulnerability vs Risk vs Exploit vs Attack</h2>
+    <p class="section-sub">ใช้การเปรียบเทียบกับ “บ้านและขโมย” เพื่อให้เห็นภาพว่าแต่ละคำอยู่ตรงไหนของเรื่องเดียวกัน</p>
+    <div class="table-wrap">
+      <table id="termTable">
+        <thead>
+          <tr>
+            <th style="width:16%">คำศัพท์</th>
+            <th style="width:14%">ภาษาไทย</th>
+            <th style="width:42%">ความหมาย</th>
+            <th>เทียบกับเรื่องบ้าน</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="formula-box">
+      <div class="f" id="riskFormula"></div>
+      <p class="muted" style="margin:10px 0 0">สูตรเชิงแนวคิดสำหรับทำความเข้าใจ ไม่ใช่สูตรคำนวณจริง</p>
+    </div>
+    <div class="card-grid two">
+      <article class="card">
+        <h3><span class="ico">🧮</span> อ่านสูตรนี้อย่างไร</h3>
+        <ul class="tick" id="riskPoints"></ul>
+      </article>
+      <article class="card">
+        <h3><span class="ico">🗂️</span> จัดการความเสี่ยงได้ 4 แบบ</h3>
+        <ul class="tick" id="riskTreat"></ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===================== บทที่ 2: ผู้โจมตีและแรงจูงใจ ===================== -->
+  <section class="page" id="actors">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 2</span>
+      <h1>ผู้โจมตีและแรงจูงใจ</h1>
+      <p class="lead">
+        การป้องกันที่ดีเริ่มจากการรู้ว่า “ใครจะมาโจมตีเรา และเขาต้องการอะไร”
+        เพราะแรงจูงใจต่างกันทำให้พฤติกรรม ความอดทน และวิธีที่เขาเลือกใช้ต่างกันโดยสิ้นเชิง
+      </p>
+    </div>
+
+    <h2 class="section-title">ประเภทของผู้โจมตี</h2>
+    <p class="section-sub">เส้นแบ่งที่สำคัญที่สุดระหว่างสายขาวกับสายดำไม่ใช่ทักษะ แต่คือ <b>การได้รับอนุญาต</b></p>
+    <div class="hacker-grid" id="hackerGrid"></div>
+
+    <h2 class="section-title">Attack Surface และ Attack Vector</h2>
+    <p class="section-sub">คลิกที่จุดต่าง ๆ รอบระบบ เพื่อดูว่าจุดนั้นเปิดช่องทางโจมตีแบบใดได้บ้าง</p>
+    <div class="card-grid two" style="margin-bottom:18px">
+      <article class="card">
+        <h3><span class="ico">🌐</span> <span id="surfaceTitle"></span></h3>
+        <p class="muted" id="surfaceDesc"></p>
+        <p class="muted"><b>เปรียบเทียบ:</b> <span id="surfaceAnalogy"></span></p>
+        <ul class="tick" id="surfaceReduce"></ul>
+      </article>
+      <article class="card">
+        <h3><span class="ico">🏹</span> <span id="vectorTitle"></span></h3>
+        <p class="muted" id="vectorDesc"></p>
+        <p class="muted"><b>เปรียบเทียบ:</b> <span id="vectorAnalogy"></span></p>
+        <ul class="tick" id="vectorReduce"></ul>
+      </article>
+    </div>
+    <div class="formula-box"><div class="f" id="surfaceKeyLine" style="font-size:1rem"></div></div>
+
+    <div class="surface-map" id="surfaceMap">
+      <div class="ring" style="width:62%;height:62%"></div>
+      <div class="ring" style="width:88%;height:88%"></div>
+      <!-- จุดต่าง ๆ เติมด้วย JS จาก SURFACE_POINTS -->
+    </div>
+    <div class="surface-info" id="surfaceInfo">คลิกที่ไอคอนรอบ ๆ วง เพื่อดูว่าจุดนั้นเป็นช่องทางโจมตีแบบใด</div>
+
+    <div class="side-note">
+      <b>ข้อสังเกตที่ออกสอบบ่อย:</b> วิธีลดความเสี่ยงที่ได้ผลและถูกที่สุดมักไม่ใช่การซื้อเครื่องมือใหม่
+      แต่คือการ <b>ลด Attack Surface</b> — ปิดสิ่งที่ไม่ได้ใช้ ถอนสิ่งที่ไม่จำเป็น และลดสิทธิ์ที่เกินความจำเป็นออก
+    </div>
+  </section>
+
+  <!-- ===================== บทที่ 3: การโจมตีตามชั้น OSI (หน้าเด่นที่สุด) ===================== -->
+  <section class="page" id="osilayers">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 3 · หัวใจของวิชานี้</span>
+      <h1>การโจมตีที่โยงกับ OSI Model</h1>
+      <p class="lead">
+        นี่คือบทที่เชื่อมความรู้ “เครือข่าย” กับ “ความปลอดภัย” เข้าด้วยกันชัดที่สุด
+        โครงเดียวกับ OSI 7 Layer ที่เคยเรียน แต่คราวนี้แต่ละชั้นจะบอกว่า
+        <b>ถูกโจมตีด้วยวิธีไหนได้บ้าง</b> และ <b>ต้องไปวางการป้องกันที่ตรงไหน</b>
+      </p>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="expandAllLayers">เปิดทุกชั้น</button>
+      <button class="btn ghost" id="collapseAllLayers">ปิดทุกชั้น</button>
+      <span class="hint">คลิกที่ชั้นเพื่อกางดูการโจมตี แล้วคลิกที่ชื่อการโจมตีเพื่อดูหลักการ ผลกระทบ และวิธีป้องกัน</span>
+    </div>
+
+    <!-- OSI stack เรียงจาก L7 ลงไป L1 เหมือนหน้า OSI ในเว็บ Computer Networks -->
+    <div class="layer-stack" id="osiAttackStack"></div>
+
+    <h2 class="section-title">ทำไม Network กับ Security ถึงแยกกันไม่ออก</h2>
+    <div class="bridge-grid" id="bridgeGrid"></div>
+
+    <div class="side-note danger">
+      <b>สรุปที่ต้องจำให้ได้:</b> การโจมตีชั้นล่าง (L1–L2) มักต้องเข้าถึงพื้นที่หรืออยู่ในวง LAN เดียวกัน
+      แต่ถ้าทำได้จะกวาดทราฟฟิกได้ทั้งวง · การโจมตีชั้นบน (L7) ทำได้จากทุกที่ในโลกผ่านอินเทอร์เน็ต
+      จึงพบมากที่สุดในทางปฏิบัติ · ส่วน L3–L4 คือชั้นที่การโจมตีแบบ DoS/DDoS อาศัยอยู่
+    </div>
+  </section>
+
+  <!-- ===================== บทที่ 4: Malware ===================== -->
+  <section class="page" id="malware">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 4</span>
+      <h1>มัลแวร์ (Malware)</h1>
+      <p class="lead">
+        Malware มาจาก Malicious + Software คือซอฟต์แวร์ที่ถูกเขียนขึ้นเพื่อสร้างความเสียหาย
+        จุดที่ข้อสอบชอบถามที่สุดไม่ใช่ชื่อ แต่คือ <b>“มันแพร่กระจายอย่างไร”</b> และ
+        <b>“ต้องพึ่งไฟล์เจ้าบ้านกับการกระทำของผู้ใช้หรือไม่”</b>
+      </p>
+    </div>
+
+    <div class="toolbar">
+      <span class="hint">คลิกที่การ์ดเพื่อสลับดูรายละเอียดแบบเต็ม</span>
+    </div>
+    <div class="card-grid tight" id="malwareGrid"></div>
+
+    <h2 class="section-title">ตารางเปรียบเทียบมัลแวร์ 10 ชนิด</h2>
+    <div class="table-wrap">
+      <table id="malwareTable">
+        <thead>
+          <tr>
+            <th style="width:14%">ชนิด</th>
+            <th style="width:22%">วิธีแพร่กระจาย</th>
+            <th style="width:9%">ต้องมี host?</th>
+            <th style="width:11%">ต้องมีคนกด?</th>
+            <th style="width:22%">เป้าหมายหลัก</th>
+            <th>ตัวอย่างที่รู้จักกัน</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">Virus เทียบกับ Worm — ข้อที่ออกสอบบ่อยที่สุด</h2>
+    <p class="section-sub">กดปุ่มเพื่อดูลำดับการแพร่กระจายของทั้งสองแบบทีละขั้น</p>
+    <div class="toolbar">
+      <button class="btn primary" id="playVW">▶ เล่นแอนิเมชันเปรียบเทียบ</button>
+      <button class="btn ghost" id="resetVW">รีเซ็ต</button>
+    </div>
+    <div class="vw-grid">
+      <div class="vw-box" id="vwVirus" style="--vc:#ef4444"></div>
+      <div class="vw-box" id="vwWorm" style="--vc:#f97316"></div>
+    </div>
+
+    <div class="side-note">
+      <b>ข้อควรรู้:</b> ในโลกจริงมัลแวร์ตัวหนึ่งมักเป็นหลายชนิดผสมกัน เช่น WannaCry
+      เป็นทั้ง <b>Worm</b> (แพร่เองผ่านช่องโหว่) และ <b>Ransomware</b> (เข้ารหัสไฟล์เรียกค่าไถ่)
+      การแบ่งชนิดจึงเป็นการแบ่งตาม “พฤติกรรมเด่น” ไม่ใช่กล่องที่แยกขาดจากกัน
+    </div>
+  </section>
+
+  <!-- ===================== บทที่ 5: Social Engineering ===================== -->
+  <section class="page" id="social">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 5</span>
+      <h1>Social Engineering — โจมตีที่ “คน” ไม่ใช่ที่ระบบ</h1>
+      <p class="lead">
+        ไม่ต้องเจาะ firewall ถ้าหลอกให้คนเปิดประตูให้เองได้
+        Social Engineering คือการใช้จิตวิทยาหลอกให้เหยื่อทำสิ่งที่ผู้โจมตีต้องการ
+        และเป็นต้นทางของเหตุการณ์ความปลอดภัยส่วนใหญ่ในโลกจริง
+      </p>
+    </div>
+
+    <div class="card-grid" style="margin-bottom:26px">
+      <article class="card danger">
+        <h3><span class="ico">🧠</span> จิตวิทยาที่ถูกใช้เป็นอาวุธ</h3>
+        <ul class="tick">
+          <li><b>อำนาจ (Authority)</b> — อ้างเป็นผู้บริหาร ตำรวจ หรือฝ่ายไอที</li>
+          <li><b>ความเร่งด่วน (Urgency)</b> — บีบเวลาจนเหยื่อไม่ทันได้คิด</li>
+          <li><b>ความกลัว (Fear)</b> — ขู่ว่าบัญชีจะถูกระงับหรือจะมีความผิด</li>
+          <li><b>ความอยากรู้ (Curiosity)</b> — หัวข้อที่ยั่วให้ต้องเปิดดู</li>
+          <li><b>ความเกรงใจ (Social proof)</b> — “คนอื่นเขาก็ทำกันแบบนี้”</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3><span class="ico">🚩</span> สัญญาณเตือนที่จำง่าย</h3>
+        <ul class="tick">
+          <li><b>เร่ง + ลับ + ผิดขั้นตอน</b> — ครบสามข้อนี้เมื่อไหร่ให้สงสัยไว้ก่อน</li>
+          <li>ขอ <b>OTP หรือรหัสผ่าน</b> — องค์กรจริงไม่ขอ ไม่ว่าช่องทางใด</li>
+          <li>โดเมนผู้ส่ง <b>สะกดต่างไปเล็กน้อย</b> จากของจริง</li>
+          <li>ลิงก์ที่ <b>ข้อความกับปลายทางไม่ตรงกัน</b></li>
+          <li>ห้ามตรวจสอบย้อนกลับ เช่น “อย่าโทรหาผม”</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3><span class="ico">✅</span> วิธีรับมือที่ใช้ได้จริง</h3>
+        <ul class="tick">
+          <li><b>หยุดก่อนคลิก</b> — ความเร่งด่วนคือเครื่องมือของผู้โจมตี</li>
+          <li><b>ยืนยันผ่านช่องทางที่สอง</b> — โทรกลับด้วยเบอร์ที่เรามีอยู่เดิม ไม่ใช่เบอร์ในอีเมล</li>
+          <li><b>เปิด MFA</b> ไว้เสมอ เพื่อให้รหัสผ่านที่รั่วไปยังไม่พอ</li>
+          <li><b>รายงานทันทีเมื่อเผลอกด</b> — แจ้งเร็วเสียหายน้อย ไม่ควรกลัวโดนตำหนิ</li>
+        </ul>
+      </article>
+    </div>
+
+    <h2 class="section-title">เทคนิคทั้งหมดที่ต้องรู้จัก</h2>
+    <div class="table-wrap">
+      <table id="socialTable">
+        <thead>
+          <tr>
+            <th style="width:20%">เทคนิค</th>
+            <th style="width:12%">ช่องทาง</th>
+            <th style="width:38%">ลักษณะ</th>
+            <th>จุดสังเกต</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">เกมทายเทคนิค — อ่านสถานการณ์แล้วเดาว่าเป็นแบบไหน</h2>
+    <p class="section-sub">มี 10 สถานการณ์จำลอง ลองทายก่อนดูเฉลย เพื่อฝึกจับสัญญาณเตือนให้ไว</p>
+    <div class="se-game">
+      <div class="se-topbar">
+        <span id="seIndex">สถานการณ์ 1 / 10</span>
+        <span class="badge plain" id="seChannel"></span>
+        <span class="sc" id="seScore">ถูก 0</span>
+      </div>
+      <div class="se-mail">
+        <div class="mh"><span>📨</span> <span class="subject" id="seTitle"></span></div>
+        <div class="mb" id="seBody"></div>
+        <div class="mf" id="seMeta"></div>
+      </div>
+      <p class="muted" style="margin-bottom:10px">นี่คือเทคนิคใด?</p>
+      <div class="se-options" id="seOptions"></div>
+      <div class="feedback hidden" id="seFeedback">
+        <div class="fb-head" id="seFbHead"></div>
+        <p id="seFbWhy"></p>
+      </div>
+      <div class="quiz-actions">
+        <button class="btn primary" id="seNext" disabled>สถานการณ์ถัดไป →</button>
+        <button class="btn ghost" id="seRestart">เริ่มใหม่</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== บทที่ 6: การโจมตีระดับเครือข่าย ===================== -->
+  <section class="page" id="netattack">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 6</span>
+      <h1>การโจมตีระดับเครือข่าย</h1>
+      <p class="lead">
+        บทนี้ขยายรายละเอียดของการโจมตีที่เจอในบทที่ 3 โดยเน้นตัวที่ออกสอบบ่อยที่สุด
+        — MITM, DoS/DDoS, การดักฟัง, การยึดเซสชัน, DNS ปลอม และการโจมตี Wi-Fi
+      </p>
+    </div>
+
+    <h2 class="section-title">Man-in-the-Middle: เทียบการส่งข้อมูลปกติกับตอนถูกดักกลาง</h2>
+    <p class="section-sub">
+      แบบแรกคือสิ่งที่เคยเห็นในเว็บ Computer Networks — A ส่งถึง B ตรง ๆ
+      แบบที่สองคือเมื่อมีผู้โจมตีแทรกกลาง โดยที่ทั้ง A และ B ยังคิดว่าคุยกันตรง ๆ อยู่
+    </p>
+    <div class="toolbar">
+      <button class="btn primary" id="playNormal">▶ ส่งข้อมูลแบบปกติ (A ↔ B)</button>
+      <button class="btn" id="playMitm">▶ ส่งข้อมูลตอนถูก MITM</button>
+      <button class="btn ghost" id="stopMitm">หยุด</button>
+    </div>
+    <div class="mitm-stage">
+      <div class="mitm-lane" id="mitmLane">
+        <div class="node safe">
+          <div class="nbox">💻</div>
+          <div class="nlbl">Computer A<br><span class="muted" style="font-size:.72rem">ผู้ส่ง</span></div>
+        </div>
+        <div class="node hidden" id="attackerNode">
+          <div class="nbox">🕴️</div>
+          <div class="nlbl">Attacker</div>
+        </div>
+        <div class="node safe">
+          <div class="nbox">🖥️</div>
+          <div class="nlbl">Computer B<br><span class="muted" style="font-size:.72rem">ผู้รับ</span></div>
+        </div>
+        <div class="wire"></div>
+        <div class="packet" id="mitmPacket">📦</div>
+      </div>
+      <div class="mitm-caption" id="mitmCaption">กดปุ่มด้านบนเพื่อเริ่มดูการเดินทางของข้อมูล</div>
+    </div>
+
+    <h2 class="section-title">DoS เทียบกับ DDoS</h2>
+    <div class="table-wrap">
+      <table id="dosTable">
+        <thead>
+          <tr>
+            <th style="width:22%">ประเด็นเปรียบเทียบ</th>
+            <th style="width:39%">DoS (Denial of Service)</th>
+            <th>DDoS (Distributed DoS)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">การโจมตีเครือข่ายที่ต้องรู้จัก</h2>
+    <div class="card-grid" id="netAttackGrid"></div>
+
+    <div class="side-note warn">
+      <b>เชื่อมกับบทที่ 3:</b> สังเกตว่าการโจมตีเหล่านี้ล้วนระบุชั้นของ OSI ได้ทั้งหมด
+      เมื่อรู้ชั้นก็รู้ทันทีว่าต้องกันที่ไหน — ARP Poisoning และ Rogue DHCP กันที่ <b>สวิตช์</b> (L2),
+      IP Spoofing กันที่ <b>เราเตอร์ขอบ</b> (L3), SYN Flood กันที่ <b>firewall/อุปกรณ์ anti-DDoS</b> (L4),
+      ส่วน DNS Spoofing และ HTTP Flood กันที่ <b>ระดับบริการและ CDN</b> (L7)
+    </div>
+  </section>
+
+  <!-- ===================== บทที่ 7: Web / Application Attacks ===================== -->
+  <section class="page" id="webattack">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 7</span>
+      <h1>การโจมตีเว็บและแอปพลิเคชัน</h1>
+      <p class="lead">
+        ทุกช่องโหว่ในบทนี้มีรากเดียวกันคือ <b>“โปรแกรมเชื่อข้อมูลจากภายนอกมากเกินไป”</b>
+        ตัวอย่างโค้ดในหน้านี้เป็นตัวอย่างสมมติเพื่ออธิบายว่าช่องโหว่เกิดจากตรงไหนและปิดอย่างไร
+        ไม่ใช่เครื่องมือที่ใช้โจมตีระบบจริง
+      </p>
+    </div>
+
+    <div class="side-note">
+      <b>หมายเหตุเพื่อการศึกษา:</b> เว็บนี้อธิบายเฉพาะ <b>หลักการทำงาน</b> และ <b>วิธีป้องกัน</b>
+      โดยตั้งใจไม่แสดง payload ที่ใช้โจมตีได้จริง เพราะเป้าหมายคือให้เข้าใจพอที่จะ “เขียนโค้ดให้ปลอดภัย”
+      และ “ตอบข้อสอบได้” ไม่ใช่เพื่อนำไปใช้กับระบบของผู้อื่น
+    </div>
+
+    <div id="webAttackList"></div>
+  </section>
+
+  <!-- ===================== บทที่ 8: Cryptography ===================== -->
+  <section class="page" id="crypto">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 8</span>
+      <h1>Cryptography พื้นฐาน</h1>
+      <p class="lead">
+        วิทยาการเข้ารหัสคือเครื่องมือที่ทำให้ CIA Triad เป็นจริงได้ในทางเทคนิค
+        เริ่มจากแยกสามคำที่คนสับสนมากที่สุดก่อน แล้วค่อยไล่ไปถึงกุญแจคู่ ใบรับรอง และการจับมือของ HTTPS
+      </p>
+    </div>
+
+    <h2 class="section-title">Encryption vs Hashing vs Encoding — คนละเรื่องกันทั้งสามอย่าง</h2>
+    <p class="section-sub">ข้อสอบชอบถามข้อนี้เพราะคนจำนวนมากเข้าใจว่า Base64 คือการเข้ารหัส ซึ่งไม่ใช่</p>
+    <div class="table-wrap">
+      <table id="cryptoCompareTable">
+        <thead>
+          <tr>
+            <th style="width:19%">ประเด็น</th>
+            <th style="width:27%">Encryption (เข้ารหัส)</th>
+            <th style="width:27%">Hashing (แฮช)</th>
+            <th>Encoding (แปลงรูปแบบ)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">Symmetric vs Asymmetric — กุญแจเดียว เทียบกับ กุญแจคู่</h2>
+    <div class="key-compare">
+      <div class="key-box" id="symBox" style="--kc:#00e07a"></div>
+      <div class="key-box" id="asymBox" style="--kc:#38bdf8"></div>
+    </div>
+    <div class="card-grid two">
+      <article class="card accent">
+        <h3><span class="ico">🔀</span> ในโลกจริงใช้ผสมกัน (Hybrid)</h3>
+        <p class="muted" id="hybridNote"></p>
+      </article>
+      <article class="card">
+        <h3><span class="ico">📌</span> กฎที่ต้องจำ: เข้ารหัสด้วยกุญแจอะไร ได้อะไร</h3>
+        <ul class="tick" id="keyRules"></ul>
+      </article>
+    </div>
+
+    <h2 class="section-title">PKI, Digital Certificate และ Digital Signature</h2>
+    <p class="section-sub">PKI คือระบบที่ทำให้เราเชื่อได้ว่า “public key นี้เป็นของคนนั้นจริง”</p>
+    <div class="card-grid tight" id="pkiGrid"></div>
+
+    <h2 class="section-title">ขั้นตอนการเซ็นและการตรวจสอบลายเซ็นดิจิทัล</h2>
+    <div class="flow-cols">
+      <div class="flow-col">
+        <h4><span class="ico">✍️</span> ฝั่งผู้ส่ง — สร้างลายเซ็น</h4>
+        <div id="signFlow"></div>
+      </div>
+      <div class="flow-col">
+        <h4><span class="ico">🔎</span> ฝั่งผู้รับ — ตรวจสอบลายเซ็น</h4>
+        <div id="verifyFlow"></div>
+      </div>
+    </div>
+    <div class="side-note" id="signNote"></div>
+
+    <h2 class="section-title">HTTPS / TLS ทำงานอย่างไร — แอนิเมชัน Handshake</h2>
+    <p class="section-sub">
+      กดเล่นเพื่อดูลำดับการจับมือทีละขั้น ขั้นตอนนี้เกิดขึ้นก่อนที่ข้อมูล Layer 7 จริง ๆ จะถูกส่ง
+    </p>
+    <div class="toolbar">
+      <button class="btn primary" id="playTls">▶ เล่น TLS Handshake</button>
+      <button class="btn ghost" id="resetTls">รีเซ็ต</button>
+    </div>
+    <div class="tls-stage">
+      <div class="tls-peers">
+        <span>💻 Client (เบราว์เซอร์)</span>
+        <span>Server (เว็บไซต์) 🖥️</span>
+      </div>
+      <div class="tls-track" id="tlsTrack"></div>
+      <div class="tls-secure" id="tlsSecure">🔒 ช่องทางถูกเข้ารหัสแล้ว — ข้อมูล HTTP ทั้งหมดจากนี้วิ่งในอุโมงค์ที่ปลอดภัย</div>
+    </div>
+    <div class="card-grid two">
+      <article class="card">
+        <h3><span class="ico">📖</span> เรื่องที่ต้องจำเกี่ยวกับ TLS</h3>
+        <ul class="tick" id="tlsNotes"></ul>
+      </article>
+      <article class="card accent">
+        <h3><span class="ico">🔗</span> โยงกับความรู้ OSI เดิม</h3>
+        <p class="muted">
+          TLS ทำงานคาบเกี่ยวระหว่าง <b>Layer 5 (Session)</b> กับ <b>Layer 6 (Presentation)</b>
+          คือเปิดเซสชันที่ปลอดภัยและจัดการการเข้ารหัส/ถอดรหัส
+          โดยวางตัวอยู่เหนือ <b>Layer 4 (TCP)</b> และให้บริการกับ <b>Layer 7 (HTTP)</b> ด้านบน
+        </p>
+        <p class="muted">นี่คือเหตุผลว่าทำไม HTTPS จึงไม่ใช่โปรโตคอลใหม่ แต่คือ HTTP ที่วิ่งอยู่ในอุโมงค์ TLS</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===================== บทที่ 9: การป้องกัน ===================== -->
+  <section class="page" id="defense">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 9</span>
+      <h1>การป้องกัน (Defense)</h1>
+      <p class="lead">
+        รู้จักการโจมตีครบแล้ว บทนี้คือฝั่งตรงข้าม — เครื่องมือและแนวทางที่ใช้กัน
+        พร้อมคำตอบว่าแต่ละอย่างต่างกันตรงไหน ซึ่งเป็นจุดที่ข้อสอบชอบถามมากที่สุด
+      </p>
+    </div>
+
+    <h2 class="section-title">Firewall: Stateless เทียบกับ Stateful</h2>
+    <div class="table-wrap">
+      <table id="firewallTable">
+        <thead>
+          <tr>
+            <th style="width:20%">ประเด็น</th>
+            <th style="width:40%">Stateless Firewall</th>
+            <th>Stateful Firewall</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <h3 style="margin-top:22px;font-size:1rem">ชนิดของ Firewall เรียงตามความลึกที่มองเห็น</h3>
+    <div class="card-grid tight" id="firewallTypes"></div>
+
+    <h2 class="section-title">IDS เทียบกับ IPS</h2>
+    <p class="section-sub">ต่างกันที่ “ตำแหน่งการวาง” และ “สิทธิ์ในการลงมือ” เป็นหลัก</p>
+    <div class="table-wrap">
+      <table id="idsTable">
+        <thead>
+          <tr>
+            <th style="width:20%">ประเด็น</th>
+            <th style="width:40%">IDS (Detection)</th>
+            <th>IPS (Prevention)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">VPN เทียบกับ Proxy</h2>
+    <div class="table-wrap">
+      <table id="vpnTable">
+        <thead>
+          <tr>
+            <th style="width:20%">ประเด็น</th>
+            <th style="width:40%">VPN</th>
+            <th>Proxy</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">การป้องกันที่เครื่องปลายทางและการจัดการช่องโหว่</h2>
+    <div class="card-grid" id="endpointGrid"></div>
+
+    <h2 class="section-title">Network Segmentation และ DMZ</h2>
+    <p class="section-sub">DMZ คือเขตกันชนระหว่างอินเทอร์เน็ตกับเครือข่ายภายใน คลิกที่โซนเพื่อดูรายละเอียด</p>
+    <div class="dmz-diagram" id="dmzDiagram"></div>
+    <div class="dmz-rules" id="dmzRules"></div>
+
+    <h2 class="section-title">Zero Trust</h2>
+    <div class="formula-box"><div class="f" id="ztSlogan" style="font-size:1.05rem"></div></div>
+    <div class="card-grid two">
+      <article class="card">
+        <h3><span class="ico">🏰</span> แนวคิดเดิมที่ใช้ไม่ได้แล้ว</h3>
+        <p class="muted" id="ztOld"></p>
+        <p class="muted" id="ztWhy"></p>
+      </article>
+      <article class="card accent">
+        <h3><span class="ico">🔒</span> หลักการของ Zero Trust</h3>
+        <ul class="tick" id="ztPrinciples"></ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===================== บทที่ 10: Security Practice & Framework ===================== -->
+  <section class="page" id="practice">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 10</span>
+      <h1>Security Practice &amp; Framework</h1>
+      <p class="lead">
+        บทสุดท้ายคือแนวปฏิบัติที่องค์กรใช้จริง ตั้งแต่เรื่องใกล้ตัวอย่างรหัสผ่านและ MFA
+        ไปจนถึงการจัดชั้นการป้องกัน การสำรองข้อมูล และการอ่านคะแนนความรุนแรงของช่องโหว่
+      </p>
+    </div>
+
+    <h2 class="section-title">นโยบายรหัสผ่านที่ดี</h2>
+    <div class="card-grid two">
+      <article class="card accent">
+        <h3><span class="ico">✅</span> สิ่งที่ควรทำ</h3>
+        <ul class="tick" id="pwGood"></ul>
+      </article>
+      <article class="card danger">
+        <h3><span class="ico">🚫</span> สิ่งที่ไม่ควรทำ</h3>
+        <ul class="cross" id="pwBad"></ul>
+      </article>
+    </div>
+    <h3 style="margin-top:22px;font-size:1rem">การโจมตีรหัสผ่านที่ต้องรู้จัก</h3>
+    <div class="table-wrap">
+      <table id="pwAttackTable">
+        <thead><tr><th style="width:24%">เทคนิค</th><th>ลักษณะ</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">MFA — ปัจจัยการยืนยันตัวตน</h2>
+    <p class="section-sub">MFA ที่แท้จริงต้องมาจาก “คนละประเภท” ไม่ใช่แค่หลายขั้นตอน</p>
+    <div class="mfa-grid" id="mfaGrid"></div>
+    <div class="side-note"><ul class="tick" id="mfaNotes" style="margin:0"></ul></div>
+
+    <h2 class="section-title">Defense in Depth — ป้องกันเป็นชั้น ๆ เหมือนหัวหอม</h2>
+    <p class="section-sub">คลิกที่แต่ละวงเพื่อดูว่าชั้นนั้นใช้อะไรป้องกันบ้าง — ผู้โจมตีต้องผ่านทุกชั้นจึงจะถึงข้อมูล</p>
+    <div class="onion-wrap">
+      <div id="onionDiagram"></div>
+      <div class="onion-detail" id="onionDetail"></div>
+    </div>
+
+    <h2 class="section-title">Backup &amp; Disaster Recovery — กฎ 3-2-1</h2>
+    <div class="rule321" id="rule321"></div>
+    <div class="side-note" id="backupModern"></div>
+    <div class="card-grid two">
+      <article class="card">
+        <h3><span class="ico">⏱️</span> ตัวชี้วัดที่ต้องจำ: RPO และ RTO</h3>
+        <ul class="tick" id="backupMetrics"></ul>
+      </article>
+      <article class="card">
+        <h3><span class="ico">💾</span> ชนิดของการสำรองข้อมูล</h3>
+        <div class="table-wrap" style="border:0">
+          <table id="backupTypes">
+            <thead><tr><th>ชนิด</th><th>ความเร็ว</th><th>พื้นที่</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </article>
+    </div>
+    <div class="card-grid two">
+      <article class="card accent">
+        <h3><span class="ico">🔑</span> Least Privilege และการแยกหน้าที่</h3>
+        <ul class="tick" id="privPrinciples"></ul>
+      </article>
+      <article class="card">
+        <h3><span class="ico">🚑</span> ลำดับขั้นการตอบสนองเหตุการณ์ (Incident Response)</h3>
+        <ol class="steps" id="irSteps"></ol>
+      </article>
+    </div>
+
+    <h2 class="section-title">CVE และ CVSS</h2>
+    <p class="section-sub" id="cveWhat"></p>
+    <div class="card-grid two">
+      <article class="card">
+        <h3><span class="ico">🏷️</span> อ่านรหัส CVE อย่างไร</h3>
+        <div class="formula-box" style="margin:6px 0 14px"><div class="f" id="cveFormat" style="font-size:1.05rem"></div></div>
+        <ul class="tick" id="cveParts"></ul>
+      </article>
+      <article class="card">
+        <h3><span class="ico">🧩</span> ตัวย่อที่มักสับสนกัน</h3>
+        <ul class="tick" id="cveRelated"></ul>
+      </article>
+    </div>
+
+    <h3 style="margin-top:26px;font-size:1rem">ลองอ่านคะแนน CVSS ด้วยตัวเอง</h3>
+    <p class="section-sub">เลือกค่าของแต่ละองค์ประกอบแล้วดูว่าคะแนนโดยประมาณเปลี่ยนไปอย่างไร (เป็นเครื่องมือช่วยให้เข้าใจความหมายของแต่ละตัว ไม่ใช่เครื่องคำนวณตามสูตรจริงของ FIRST)</p>
+    <div class="cvss-tool">
+      <div class="cvss-metrics" id="cvssMetrics"></div>
+      <div class="cvss-panel">
+        <div class="cvss-score" id="cvssScore">0.0</div>
+        <div class="cvss-level" id="cvssLevel">None</div>
+        <div class="cvss-vector" id="cvssVector"></div>
+        <div class="cvss-action" id="cvssAction"></div>
+        <div class="cvss-bands" id="cvssBands"></div>
+      </div>
+    </div>
+    <h3 style="margin-top:26px;font-size:1rem">ตัวอย่างการอ่านคะแนนจริง</h3>
+    <div class="cvss-ex" id="cvssExamples"></div>
+
+    <h2 class="section-title">เฟรมเวิร์กและมาตรฐานที่ควรรู้จักชื่อ</h2>
+    <div class="card-grid" id="frameworkGrid"></div>
+  </section>
+
+  <!-- ===================== หน้า Quiz ===================== -->
+  <section class="page" id="quiz">
+    <div class="page-head">
+      <span class="eyebrow">แบบทดสอบ</span>
+      <h1>ทดสอบความเข้าใจ</h1>
+      <p class="lead">ตอบทีละข้อ รู้ผลทันทีพร้อมคำอธิบาย จบแล้วดูสรุปคะแนนแยกตามหมวด — สถิติเก็บไว้ในเครื่องคุณเอง</p>
+    </div>
+
+    <!-- หน้าจอเริ่มต้น -->
+    <div class="quiz-panel" id="quizStart">
+      <div class="quiz-hero">
+        <div class="quiz-hero-num" id="quizTotalNum">0</div>
+        <div>
+          <h3>ข้อสอบปรนัยครอบคลุมทั้ง 10 บท</h3>
+          <p class="muted">เน้นบทที่ 3 (การโจมตีตามชั้น OSI) และบทที่ 6 (การโจมตีระดับเครือข่าย) เป็นพิเศษ</p>
+        </div>
+      </div>
+
+      <div class="stat-row" id="quizStats"><!-- สถิติจาก localStorage --></div>
+
+      <div class="quiz-opts">
+        <div>
+          <div class="mode-label">เลือกขอบเขตข้อสอบ — กดที่บทเพื่อเลือก/ยกเลิก (ไม่เลือกเลย = ทำครบทุกบท)</div>
+          <div class="chips" id="quizChapterChips"></div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="shuffleQuiz" checked>
+          <span>สลับลำดับข้อและตัวเลือกทุกครั้ง</span>
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="limitQuiz">
+          <span>จำกัดจำนวนข้อไว้ที่ 20 ข้อ (เหมาะกับการทบทวนเร็ว ๆ)</span>
+        </label>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn primary big" id="startQuiz">เริ่มทำแบบทดสอบ</button>
+        <button class="btn ghost" id="clearStats">ล้างสถิติที่บันทึกไว้</button>
+      </div>
+    </div>
+
+    <!-- หน้าจอทำข้อสอบ -->
+    <div class="quiz-panel hidden" id="quizPlay">
+      <div class="quiz-topbar">
+        <span class="q-index" id="qIndex">ข้อ 1 / 20</span>
+        <span class="q-cat" id="qCat">หมวด</span>
+        <span class="q-score" id="qScore">ถูก 0</span>
+      </div>
+      <div class="quiz-bar"><div id="quizBarFill"></div></div>
+
+      <h3 class="q-text" id="qText"></h3>
+      <div class="choices" id="qChoices"></div>
+
+      <div class="feedback hidden" id="qFeedback">
+        <div class="fb-head" id="fbHead"></div>
+        <p id="fbWhy"></p>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn primary" id="nextQ" disabled>ข้อถัดไป →</button>
+        <button class="btn ghost" id="quitQuiz">ออกจากแบบทดสอบ</button>
+      </div>
+    </div>
+
+    <!-- หน้าจอสรุปผล -->
+    <div class="quiz-panel hidden" id="quizResult">
+      <div class="score-ring" id="scoreRing">
+        <div class="score-inner">
+          <div class="score-pct" id="scorePct">0%</div>
+          <div class="score-raw" id="scoreRaw">0 / 0</div>
+        </div>
+      </div>
+      <h3 id="scoreVerdict"></h3>
+      <p class="muted" id="scoreAdvice"></p>
+      <div class="cat-breakdown" id="catBreakdown"></div>
+      <div class="quiz-actions center">
+        <button class="btn primary" id="retryQuiz">ทำใหม่อีกครั้ง</button>
+        <button class="btn" id="retryWrong">ทบทวนเฉพาะข้อที่ผิด</button>
+        <button class="btn ghost" id="backToStart">กลับหน้าเริ่มต้น</button>
+      </div>
+      <div class="wrong-list" id="wrongList"></div>
+    </div>
+  </section>
+
+  <!-- ===================== หน้า Flashcards ===================== -->
+  <section class="page" id="flashcards">
+    <div class="page-head">
+      <span class="eyebrow">Flashcards</span>
+      <h1>การ์ดคำศัพท์</h1>
+      <p class="lead">คลิกที่การ์ดเพื่อพลิกดูคำตอบ ใช้ปุ่มลูกศรซ้าย–ขวาบนคีย์บอร์ดเลื่อนการ์ด และกด Space เพื่อพลิก</p>
+    </div>
+
+    <div class="toolbar">
+      <span class="hint">กรองตามบท:</span>
+      <div class="chips" id="fcFilter"></div>
+    </div>
+
+    <div class="fc-stage">
+      <button class="fc-nav prev" id="fcPrev" aria-label="การ์ดก่อนหน้า">‹</button>
+      <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="คลิกเพื่อพลิกการ์ด">
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <span class="fc-tag" id="fcTag"></span>
+            <p id="fcQuestion"></p>
+            <span class="fc-hint">คลิกเพื่อดูคำตอบ</span>
+          </div>
+          <div class="fc-face fc-back">
+            <span class="fc-tag">คำตอบ</span>
+            <p id="fcAnswer"></p>
+            <span class="fc-hint">คลิกเพื่อกลับด้าน</span>
+          </div>
+        </div>
+      </div>
+      <button class="fc-nav next" id="fcNext" aria-label="การ์ดถัดไป">›</button>
+    </div>
+
+    <div class="fc-controls">
+      <span class="fc-counter" id="fcCounter">1 / 0</span>
+      <button class="btn" id="fcShuffle">🔀 สุ่มลำดับ</button>
+      <button class="btn ghost" id="fcOrder">↕ เรียงตามบท</button>
+      <button class="btn ghost" id="fcFlip">🔄 พลิกการ์ด</button>
+    </div>
+    <div class="fc-progress"><div id="fcProgressFill"></div></div>
+  </section>
+
+  <!-- ===================== หน้า Cheat Sheet ===================== -->
+  <section class="page" id="cheatsheet">
+    <div class="page-head">
+      <span class="eyebrow">Cheat Sheet</span>
+      <h1>สรุปทุกบทในหน้าเดียว</h1>
+      <p class="lead">อ่านทวนก่อนสอบ หรือกดปุ่มพิมพ์เพื่อบันทึกเป็น PDF เก็บไว้ (ตอนพิมพ์จะได้เฉพาะหน้านี้)</p>
+      <button class="btn primary" id="printBtn" style="margin-top:8px">🖨️ Print / Save as PDF</button>
+    </div>
+
+    <div class="sheet">
+      <h2>1. แนวคิดหลัก</h2>
+      <div class="sheet-cols">
+        <div>
+          <h4 style="font-size:.92rem">CIA Triad</h4>
+          <ul class="mini-list" id="sheetCia"></ul>
+        </div>
+        <div>
+          <h4 style="font-size:.92rem">AAA + Non-repudiation</h4>
+          <ul class="mini-list" id="sheetAaa"></ul>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <h4 style="font-size:.92rem">คำที่มักสับสน</h4>
+        <ul class="mini-list" id="sheetTerms"></ul>
+      </div>
+
+      <h2>2. ผู้โจมตี</h2>
+      <ul class="mini-list" id="sheetHackers"></ul>
+
+      <h2>3. การโจมตีแยกตามชั้น OSI (ออกสอบบ่อยที่สุด)</h2>
+      <div class="table-wrap">
+        <table id="sheetOsi">
+          <thead><tr><th style="width:8%">ชั้น</th><th style="width:18%">ชื่อชั้น</th><th>การโจมตีที่เกิดได้</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <h2>4. มัลแวร์</h2>
+      <div class="table-wrap">
+        <table id="sheetMalware">
+          <thead><tr><th style="width:16%">ชนิด</th><th style="width:12%">ต้องมี host</th><th style="width:14%">ต้องมีคนกด</th><th>จุดเด่น</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <h2>5. Social Engineering</h2>
+      <ul class="mini-list" id="sheetSocial"></ul>
+
+      <h2>6. การโจมตีเครือข่าย</h2>
+      <div class="sheet-cols">
+        <div>
+          <h4 style="font-size:.92rem">รายการที่ต้องจำ</h4>
+          <ul class="mini-list" id="sheetNet"></ul>
+        </div>
+        <div>
+          <h4 style="font-size:.92rem">DoS เทียบ DDoS</h4>
+          <ul class="mini-list" id="sheetDos"></ul>
+        </div>
+      </div>
+
+      <h2>7. ช่องโหว่เว็บและแอปพลิเคชัน</h2>
+      <ul class="mini-list" id="sheetWeb"></ul>
+
+      <h2>8. Cryptography</h2>
+      <div class="sheet-cols">
+        <div>
+          <h4 style="font-size:.92rem">Encryption / Hashing / Encoding</h4>
+          <ul class="mini-list" id="sheetCrypto"></ul>
+        </div>
+        <div>
+          <h4 style="font-size:.92rem">TLS Handshake</h4>
+          <ul class="mini-list" id="sheetTls"></ul>
+        </div>
+      </div>
+
+      <h2>9. การป้องกัน</h2>
+      <div class="sheet-cols">
+        <div>
+          <h4 style="font-size:.92rem">เปรียบเทียบเครื่องมือ</h4>
+          <ul class="mini-list" id="sheetDefense"></ul>
+        </div>
+        <div>
+          <h4 style="font-size:.92rem">DMZ และ Zero Trust</h4>
+          <ul class="mini-list" id="sheetZones"></ul>
+        </div>
+      </div>
+
+      <h2>10. แนวปฏิบัติและเฟรมเวิร์ก</h2>
+      <div class="sheet-cols">
+        <div>
+          <h4 style="font-size:.92rem">MFA และ Defense in Depth</h4>
+          <ul class="mini-list" id="sheetPractice"></ul>
+        </div>
+        <div>
+          <h4 style="font-size:.92rem">Backup, CVE และ CVSS</h4>
+          <ul class="mini-list" id="sheetCvss"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>เว็บติวสอบ Cyber Security Fundamentals · จัดทำเพื่อการศึกษาเท่านั้น · ข้อมูลความคืบหน้าและคะแนนถูกเก็บไว้ในเบราว์เซอร์ของคุณเอง</p>
+</footer>
+
+<!-- data.js ต้องโหลดก่อน script.js เสมอ เพราะ script.js อ่านตัวแปรจากไฟล์นี้ -->
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

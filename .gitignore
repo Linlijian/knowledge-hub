@@ -1,0 +1,10 @@
+# treasury/ เป็น git repo ของตัวเอง (github.com/Linlijian/treasury-quiz)
+# กันไม่ให้ repo นี้ไปกลืนไฟล์ของมัน — แก้ที่นั่นแล้ว push แยกตามเดิม
+treasury/
+
+# OS / editor
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/

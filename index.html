@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="คลังความรู้รวม — ติวสอบ Cyber Security, Computer Networks (OSI/TCP-IP) และคลังข้อสอบ Treasury ในที่เดียว">
+<meta name="theme-color" content="#0b0f14">
+<title>คลังความรู้ | Knowledge Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/hub.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hub-head">
+    <div>
+      <p class="eyebrow">Knowledge Hub</p>
+      <h1>คลังความรู้</h1>
+      <p class="lede">รวมเว็บติวสอบและคลังข้อสอบไว้ที่เดียว เลือกหัวข้อที่ต้องการฝึกได้เลย แต่ละหัวข้อยังเป็นเว็บอิสระที่ทำงานได้ครบเหมือนเดิม</p>
+    </div>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="สลับธีมสว่าง/มืด" title="สลับธีม">🌙</button>
+  </header>
+
+  <main>
+    <div class="cards">
+
+      <a class="card card--cyber" href="cybersecurity/index.html">
+        <div class="card-icon" aria-hidden="true">🛡️</div>
+        <h2>Cyber Security</h2>
+        <p class="sub">ความมั่นคงปลอดภัยไซเบอร์</p>
+        <p>พื้นฐานความปลอดภัยตั้งแต่ CIA Triad ไปจนถึงการโจมตีจริงที่แมปกับ OSI แต่ละชั้น พร้อมควิซและแฟลชการ์ด</p>
+        <ul class="tags">
+          <li>CIA Triad</li><li>Threat Actors</li><li>Malware</li>
+          <li>Social Engineering</li><li>Cryptography</li><li>Defense</li>
+        </ul>
+        <span class="card-go">เข้าสู่บทเรียน <span aria-hidden="true">→</span></span>
+      </a>
+
+      <a class="card card--net" href="networking/index.html">
+        <div class="card-icon" aria-hidden="true">🌐</div>
+        <h2>Computer Networks</h2>
+        <p class="sub">OSI Model &amp; TCP/IP</p>
+        <p>ไล่ตั้งแต่ 7 ชั้นของ OSI, การห่อข้อมูลแบบเห็นภาพเคลื่อนไหว, อุปกรณ์เครือข่าย ไปจนถึงการคำนวณ IP และ topology</p>
+        <ul class="tags">
+          <li>OSI 7 Layers</li><li>TCP/IP</li><li>Encapsulation</li>
+          <li>Devices</li><li>IPv4 / IPv6 / MAC</li><li>Topology</li>
+        </ul>
+        <span class="card-go">เข้าสู่บทเรียน <span aria-hidden="true">→</span></span>
+      </a>
+
+      <a class="card card--treas" href="treasury/index.html">
+        <div class="card-icon" aria-hidden="true">🏛️</div>
+        <h2>คลังสมบัติข้อสอบ</h2>
+        <p class="sub">Treasury Quiz</p>
+        <p>คลังข้อสอบแยกตามหมวดหมู่ ฝึกทำเป็นชุด พร้อมรูปประกอบ สรุปคะแนนท้ายชุด และโหมด Hardcore</p>
+        <ul class="tags">
+          <li>กฎหมาย</li><li>สาขาอาชีพ</li><li>ข้อสอบพร้อมรูป</li><li>สรุปคะแนน</li>
+        </ul>
+        <span class="card-go">เข้าสู่คลังข้อสอบ <span aria-hidden="true">→</span></span>
+      </a>
+
+    </div>
+
+    <p class="note" id="serve-note">
+      <strong>หมายเหตุ:</strong> หัวข้อ <em>คลังสมบัติข้อสอบ</em> โหลดข้อมูลด้วย <code>fetch()</code>
+      จึงต้องเปิดผ่านเว็บเซิร์ฟเวอร์ ไม่ใช่ดับเบิลคลิกไฟล์ตรงๆ — รันคำสั่ง
+      <code>python -m http.server 8000</code> ที่โฟลเดอร์นี้ แล้วเปิด
+      <code>http://localhost:8000/</code> (หรือดับเบิลคลิก <code>serve.cmd</code>)
+      ส่วนอีกสองหัวข้อเปิดจากไฟล์ตรงๆ ได้เลย
+    </p>
+  </main>
+
+  <footer>คลังความรู้ · Cyber Security · Computer Networks · Treasury Quiz</footer>
+</div>
+
+<script>
+/* ธีมของหน้า hub — เก็บแยก key จากเว็บย่อย (เว็บย่อยใช้ 'theme:<ชื่อโฟลเดอร์>') */
+(function () {
+  var KEY = 'theme:hub';
+  var root = document.documentElement;
+  var btn = document.getElementById('theme-toggle');
+
+  var saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (e) {}
+  var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  var theme = saved || (prefersLight ? 'light' : 'dark');
+
+  function apply(t) {
+    root.setAttribute('data-theme', t);
+    btn.textContent = t === 'dark' ? '🌙' : '☀️';
+  }
+  apply(theme);
+
+  btn.addEventListener('click', function () {
+    theme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(theme);
+    try { localStorage.setItem(KEY, theme); } catch (e) {}
+  });
+
+  /* เปิดแบบ file:// อยู่ → เน้นหมายเหตุเรื่องต้องรันเซิร์ฟเวอร์ */
+  if (location.protocol === 'file:') {
+    document.getElementById('serve-note').style.borderLeftColor = '#f59e0b';
+  }
+})();
+</script>
+</body>
+</html>

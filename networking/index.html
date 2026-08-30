@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ติวสอบ Computer Networks — OSI Model &amp; TCP/IP</title>
+<meta name="description" content="เว็บติวสอบเรื่อง OSI Model และ TCP/IP แบบ interactive มี quiz, flashcards และแอนิเมชัน encapsulation">
+
+<!-- Google Fonts: Noto Sans Thai สำหรับภาษาไทย, JetBrains Mono สำหรับโค้ด/ตัวเลข -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+    <script src="../shared/hub-nav.js"></script>
+</head>
+<body>
+
+<!-- ===================== แถบ progress บอกความคืบหน้าการเรียน ===================== -->
+<div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- ===================== HEADER + NAVIGATION ===================== -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-mark">OSI</span>
+      <div class="brand-text">
+        <strong>Computer Networks</strong>
+        <small>ติวสอบ OSI Model &amp; TCP/IP</small>
+      </div>
+    </div>
+
+    <!-- ปุ่มเปิดเมนูบนจอมือถือ -->
+    <button class="icon-btn nav-toggle" id="navToggle" aria-label="เปิดเมนู" aria-expanded="false">
+      <span class="burger"></span>
+    </button>
+
+    <nav class="main-nav" id="mainNav" aria-label="เมนูหลัก">
+      <button class="nav-link is-active" data-target="overview">ภาพรวม</button>
+      <button class="nav-link" data-target="layers">7 Layers</button>
+      <button class="nav-link" data-target="encap">Encapsulation</button>
+      <button class="nav-link" data-target="devices">Devices</button>
+      <button class="nav-link" data-target="addressing">IP &amp; MAC</button>
+      <button class="nav-link" data-target="nettypes">Types &amp; Topology</button>
+      <button class="nav-link" data-target="protocols">Protocols</button>
+      <button class="nav-link" data-target="quiz">แบบทดสอบ</button>
+      <button class="nav-link" data-target="flashcards">Flashcards</button>
+      <button class="nav-link" data-target="cheatsheet">Cheat Sheet</button>
+    </nav>
+
+    <button class="icon-btn theme-btn" id="themeToggle" aria-label="สลับธีมสว่าง/มืด" title="สลับธีม">
+      <span id="themeIcon">🌙</span>
+    </button>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- ===================== 1. OVERVIEW ===================== -->
+  <section class="page is-active" id="overview">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 1</span>
+      <h1>ภาพรวม: ทำไมต้องมีโมเดลชั้นเครือข่าย</h1>
+      <p class="lead">
+        เวลาเราเปิดเว็บสักหน้า มีงานหลายสิบอย่างเกิดขึ้นพร้อมกัน ตั้งแต่การแปลชื่อโดเมนเป็น IP
+        การหาเส้นทาง ไปจนถึงการยิงสัญญาณไฟฟ้าออกไปบนสาย OSI Model คือการจับงานทั้งหมดนั้น
+        มาจัดเป็นชั้น ๆ เพื่อให้เข้าใจ ออกแบบ และแก้ปัญหาได้ทีละส่วน
+      </p>
+    </div>
+
+    <div class="card-grid">
+      <article class="card">
+        <h3><span class="ico">📚</span> OSI Model คืออะไร</h3>
+        <p>
+          OSI ย่อมาจาก <b>Open Systems Interconnection</b> เป็นแบบจำลองอ้างอิงที่องค์กร ISO
+          กำหนดขึ้นในปี ค.ศ. 1984 เพื่อใช้อธิบายว่าข้อมูลเดินทางจากโปรแกรมบนเครื่องหนึ่ง
+          ไปถึงโปรแกรมบนอีกเครื่องหนึ่งได้อย่างไร โดยแบ่งกระบวนการทั้งหมดออกเป็น <b>7 ชั้น</b>
+        </p>
+        <p class="muted">
+          ข้อควรจำ: OSI เป็นแบบจำลอง <i>เชิงอ้างอิง</i> ที่ใช้สอนและใช้สื่อสารกัน
+          ส่วนอินเทอร์เน็ตจริง ๆ ทำงานบนชุดโปรโตคอล TCP/IP
+        </p>
+      </article>
+
+      <article class="card">
+        <h3><span class="ico">🧩</span> ทำไมต้องแบ่งเป็นชั้น</h3>
+        <ul class="tick">
+          <li><b>แยกความรับผิดชอบ</b> — แต่ละชั้นทำงานของตัวเองอย่างเดียว ไม่ก้าวก่ายกัน</li>
+          <li><b>เปลี่ยนชิ้นส่วนได้อิสระ</b> — เปลี่ยนจากสาย LAN เป็น Wi-Fi (L1–L2) โดยไม่ต้องแก้เบราว์เซอร์ (L7)</li>
+          <li><b>แก้ปัญหาง่ายขึ้น</b> — ไล่ปัญหาทีละชั้นตั้งแต่สายหลุด (L1) ไปจนถึงเว็บล่ม (L7)</li>
+          <li><b>ผู้ผลิตต่างเจ้าคุยกันได้</b> — ยึดมาตรฐานเดียวกัน อุปกรณ์ต่างยี่ห้อจึงทำงานร่วมกันได้</li>
+          <li><b>เรียนรู้ง่าย</b> — ย่อยเรื่องซับซ้อนเป็นก้อนเล็ก ๆ ที่จำได้</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3><span class="ico">🏠</span> เปรียบเทียบกับการส่งพัสดุ</h3>
+        <p>
+          ลองนึกถึงการส่งของ: คุณเขียนจดหมาย (L7) ใส่ซองและปิดผนึก (L6) ตกลงกับผู้รับว่าจะส่งเมื่อไหร่ (L5)
+          แบ่งของเป็นหลายกล่องพร้อมเบอร์กล่อง (L4) เขียนที่อยู่บ้านปลายทาง (L3)
+          ส่งต่อให้รถขนส่งคันถัดไปตามจุด (L2) และสุดท้ายรถวิ่งบนถนนจริง (L1)
+        </p>
+        <p class="muted">ฝั่งผู้รับก็แกะย้อนกลับขึ้นมาทีละชั้นจนได้จดหมายฉบับเดิม</p>
+      </article>
+    </div>
+
+    <h2 class="section-title">OSI Model เทียบกับ TCP/IP Model</h2>
+    <p class="section-sub">
+      TCP/IP เป็นโมเดลที่ใช้งานจริงบนอินเทอร์เน็ต มี 4 ชั้น เกิดขึ้นก่อน OSI ด้วยซ้ำ
+      ความสัมพันธ์ของทั้งสองโมเดลเป็นดังนี้
+    </p>
+
+    <div class="table-wrap">
+      <table class="cmp-table" id="compareTable">
+        <thead>
+          <tr>
+            <th style="width:26%">TCP/IP Model (4 ชั้น)</th>
+            <th style="width:24%">ตรงกับ OSI (7 ชั้น)</th>
+            <th style="width:22%">โปรโตคอลตัวอย่าง</th>
+            <th>หมายเหตุ</th>
+          </tr>
+        </thead>
+        <tbody><!-- เติมด้วย JS จาก MODEL_COMPARE --></tbody>
+      </table>
+    </div>
+
+    <div class="card-grid two">
+      <article class="card">
+        <h3><span class="ico">⚖️</span> ความต่างที่มักออกสอบ</h3>
+        <ul class="tick">
+          <li>OSI มี 7 ชั้น / TCP/IP มี 4 ชั้น (บางตำราแบ่งเป็น 5 ชั้น โดยแยก Physical ออกมา)</li>
+          <li>OSI พัฒนาโดย ISO / TCP/IP พัฒนาโดย DARPA (กระทรวงกลาโหมสหรัฐฯ)</li>
+          <li>OSI สร้างโมเดลก่อนแล้วค่อยมีโปรโตคอล / TCP/IP มีโปรโตคอลใช้งานจริงก่อนแล้วจึงสรุปเป็นโมเดล</li>
+          <li>OSI แยกหน้าที่ชัดเจนกว่า เหมาะกับการเรียน / TCP/IP ยืดหยุ่นกว่า จึงถูกใช้งานจริง</li>
+        </ul>
+      </article>
+      <article class="card accent">
+        <h3><span class="ico">🚀</span> เริ่มติวยังไงดี</h3>
+        <ol class="steps">
+          <li>ท่องชื่อ 7 ชั้นด้วย mnemonic ให้ขึ้นใจก่อน</li>
+          <li>จำ PDU ของแต่ละชั้น (Bit / Frame / Packet / Segment / Data)</li>
+          <li>จำอุปกรณ์ประจำชั้น (Hub=1, Switch=2, Router=3)</li>
+          <li>ท่องพอร์ตสำคัญ 10 ตัวแรกในหน้า Protocols</li>
+          <li>ดูแอนิเมชัน Encapsulation ให้เห็นภาพรวม</li>
+          <li>ลงมือทำ Quiz แล้ววนทวนด้วย Flashcards</li>
+        </ol>
+        <button class="btn primary" data-goto="layers">ไปหน้า 7 Layers →</button>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===================== 2. OSI 7 LAYERS ===================== -->
+  <section class="page" id="layers">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 2</span>
+      <h1>OSI 7 Layers แบบคลิกดูได้</h1>
+      <p class="lead">คลิกที่ชั้นใดก็ได้เพื่อกางรายละเอียด — หน้าที่ PDU โปรโตคอล และอุปกรณ์ประจำชั้นนั้น</p>
+    </div>
+
+    <!-- กล่อง mnemonic ช่วยจำ -->
+    <div class="mnemo-wrap" id="mnemonicBox"><!-- เติมด้วย JS --></div>
+
+    <div class="layer-toolbar">
+      <button class="btn ghost" id="expandAll">กางทั้งหมด</button>
+      <button class="btn ghost" id="collapseAll">พับทั้งหมด</button>
+      <span class="hint">เคล็ดลับ: ชั้นบน = ใกล้ผู้ใช้ / ชั้นล่าง = ใกล้สายสัญญาณ</span>
+    </div>
+
+    <!-- Stack 7 ชั้น สร้างด้วย JS จาก OSI_LAYERS -->
+    <div class="layer-stack" id="layerStack"></div>
+
+    <div class="side-note">
+      <b>สังเกต:</b> ชั้นที่ 7-6-5 มักถูกรวมเรียกว่า “ชั้นบน” (Upper Layers) ซึ่งเป็นเรื่องของซอฟต์แวร์และผู้ใช้
+      ส่วนชั้น 4-3-2-1 คือ “ชั้นล่าง” (Lower Layers) ที่รับผิดชอบการขนส่งข้อมูลจริง ๆ
+    </div>
+  </section>
+
+  <!-- ===================== 3. ENCAPSULATION ANIMATION (ฉบับละเอียด) ===================== -->
+  <section class="page" id="encap">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 3</span>
+      <h1>Encapsulation &amp; Decapsulation</h1>
+      <p class="lead">
+        จำลองการส่งข้อมูลจริงจาก Computer A ไป Computer B โดยวิ่งผ่าน Switch และ Router
+        ดูว่ากล่องข้อมูลโตขึ้นทีละชั้นตอนส่ง แล้วเล็กลงทีละชั้นตอนรับอย่างไร
+        และทำไม MAC ถึงเปลี่ยนระหว่างทางแต่ IP ไม่เปลี่ยน
+      </p>
+    </div>
+
+    <!-- เลือกโปรโตคอลชั้น 4 เพื่อเทียบ Segment กับ Datagram -->
+    <div class="tp-toggle-row">
+      <span class="tp-label">โปรโตคอลชั้น 4:</span>
+      <div class="seg" id="tpToggle" role="group" aria-label="เลือกโปรโตคอลชั้น 4">
+        <button class="seg-btn is-active" data-mode="tcp">TCP → Segment</button>
+        <button class="seg-btn" data-mode="udp">UDP → Datagram</button>
+      </div>
+      <span class="tp-note" id="tpNote"></span>
+    </div>
+
+    <!-- ผังเส้นทาง Computer A → Switch → Router → Computer B -->
+    <div class="net-path" id="netPath"></div>
+
+    <!-- แผงควบคุมแอนิเมชัน -->
+    <div class="anim-controls">
+      <button class="btn primary" id="enPlay">▶ เล่น</button>
+      <button class="btn" id="enPause" disabled>⏸ หยุดชั่วคราว</button>
+      <button class="btn" id="enPrev">◀ ย้อนขั้น</button>
+      <button class="btn" id="enNext">ทีละขั้น ▶</button>
+      <button class="btn ghost" id="enReset">↺ เริ่มใหม่</button>
+      <label class="speed">
+        ความเร็ว
+        <input type="range" id="enSpeed" min="600" max="3200" step="200" value="1800">
+        <span class="speed-val" id="enSpeedVal">1.8 วิ/ขั้น</span>
+      </label>
+    </div>
+
+    <div class="anim-progress"><div id="enProgressFill"></div></div>
+
+    <div class="encap-grid">
+      <!-- กอง 7 ชั้นของเครื่องผู้ส่ง -->
+      <div class="host-col">
+        <div class="host-label sender">💻 Computer A — Encapsulation ↓</div>
+        <div class="host-stack" id="enStackA"></div>
+      </div>
+
+      <!-- กล่องข้อมูลที่โตขึ้น/เล็กลง + คำอธิบายว่าตอนนี้กำลังทำอะไร -->
+      <div class="encap-center">
+        <div class="pdu-box">
+          <div class="pdu-label" id="enPduLabel">PDU: —</div>
+          <div class="pdu-blocks" id="enBlocks"></div>
+          <div class="hdr-fields" id="enFields"></div>
+        </div>
+        <div class="step-explain" id="enExplain">
+          <h4>พร้อมเริ่มแล้ว</h4>
+          <p>กด “เล่น” เพื่อดูทั้งกระบวนการรวดเดียว หรือกด “ทีละขั้น” เพื่อเดินเองช้า ๆ</p>
+        </div>
+        <div class="step-count" id="enCount">ขั้นที่ 0 / 0</div>
+      </div>
+
+      <!-- กอง 7 ชั้นของเครื่องผู้รับ -->
+      <div class="host-col">
+        <div class="host-label receiver">🖥️ Computer B — Decapsulation ↑</div>
+        <div class="host-stack" id="enStackB"></div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span><i class="sw l2"></i> L2 Header / Trailer (MAC, FCS)</span>
+      <span><i class="sw l3"></i> L3 Header (IP)</span>
+      <span><i class="sw l4"></i> L4 Header (TCP / UDP)</span>
+      <span><i class="sw data"></i> Data ของผู้ใช้</span>
+      <span><i class="sw bit"></i> Bit บนสื่อกลาง</span>
+    </div>
+
+    <div class="side-note">
+      <b>จุดที่ออกสอบบ่อยที่สุดของบทนี้:</b> ลองกดไปถึงขั้นที่ Router ทำงาน แล้วสังเกตว่า
+      <b>MAC ต้นทาง–ปลายทางเปลี่ยนใหม่ทุก hop</b> เพราะใช้ส่งกันแค่ช่วงต่อช่วง
+      ส่วน <b>IP ต้นทาง–ปลายทางคงเดิมตลอดเส้นทาง</b> เพราะเป็นที่อยู่ของปลายทางจริง ๆ
+      และอย่าลืมว่า Switch แกะดูแค่ Layer 2 ส่วน Router แกะได้ถึง Layer 3
+    </div>
+
+    <h2 class="section-title">ตารางสรุป PDU และสิ่งที่อยู่ข้างในแต่ละชั้น</h2>
+    <p class="section-sub">ใช้ทวนเร็ว ๆ ก่อนเข้าห้องสอบ ว่าแต่ละชั้นห่ออะไรเพิ่มและใช้ที่อยู่แบบไหน</p>
+    <div class="table-wrap">
+      <table class="sheet-table" id="pduInsideTable">
+        <thead>
+          <tr>
+            <th style="width:15%">Layer</th>
+            <th style="width:16%">PDU</th>
+            <th style="width:19%">Header ที่เพิ่ม</th>
+            <th>ข้างในมีอะไร</th>
+            <th style="width:14%">ที่อยู่ที่ใช้</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== 4. NETWORK DEVICES ===================== -->
+  <section class="page" id="devices">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 4</span>
+      <h1>Network Devices</h1>
+      <p class="lead">
+        อุปกรณ์แต่ละชนิด “ฉลาด” ไม่เท่ากัน ความฉลาดวัดจากว่ามันอ่านข้อมูลได้ลึกถึงชั้นไหน
+        สีของการ์ดแต่ละใบตรงกับสีประจำชั้นในหน้า 7 Layers เพื่อให้จำคู่กันได้เลย
+      </p>
+    </div>
+
+    <div class="dev-grid" id="devGrid"></div>
+
+    <h2 class="section-title">Collision Domain กับ Broadcast Domain</h2>
+    <p class="section-sub">
+      โจทย์ยอดฮิตคือ “อุปกรณ์ใดแยก collision domain” และ “อุปกรณ์ใดแยก broadcast domain”
+      จำสั้น ๆ ว่า <b>Switch แยก collision ได้ แต่หยุด broadcast ไม่ได้ ส่วน Router แยกได้ทั้งสองอย่าง</b>
+    </p>
+    <div class="table-wrap">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th style="width:20%">อุปกรณ์</th>
+            <th style="width:10%">Layer</th>
+            <th style="width:24%">Collision Domain</th>
+            <th style="width:24%">Broadcast Domain</th>
+            <th>หมายเหตุ</th>
+          </tr>
+        </thead>
+        <tbody id="domainTable"></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">ผังเครือข่ายตัวอย่าง — คลิกที่อุปกรณ์ได้</h2>
+    <p class="section-sub">
+      นี่คือผังของออฟฟิศเล็ก ๆ หนึ่งแห่ง คลิกที่อุปกรณ์ใดก็ได้ในผัง
+      เพื่อดูว่ามันทำงานอยู่ชั้นไหนและทำหน้าที่อะไรในจุดนั้น
+    </p>
+    <div class="topo-live">
+      <div class="topo-canvas" id="topoCanvas"></div>
+      <aside class="topo-info" id="topoInfo"></aside>
+    </div>
+  </section>
+
+  <!-- ===================== 5. IPv4, IPv6 & MAC ADDRESS ===================== -->
+  <section class="page" id="addressing">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 5</span>
+      <h1>IPv4, IPv6 &amp; MAC Address</h1>
+      <p class="lead">
+        เครือข่ายใช้ที่อยู่สองแบบคู่กันเสมอ — MAC ที่ Layer 2 ไว้ส่งกันในวงเดียวกัน
+        และ IP ที่ Layer 3 ไว้ส่งข้ามเครือข่าย บทนี้แยกให้เห็นชัดว่าใครทำหน้าที่อะไร
+      </p>
+    </div>
+
+    <h2 class="section-title">IPv4 — โครงสร้าง 32 บิต</h2>
+    <div class="card-grid">
+      <article class="card">
+        <h3><span class="ico">🔢</span> อ่านค่า IPv4 อย่างไร</h3>
+        <p>
+          IPv4 ยาว 32 บิต แบ่งเป็น 4 กลุ่มกลุ่มละ 8 บิต เรียกว่า <b>octet</b>
+          แต่ละ octet เขียนเป็นเลขฐานสิบได้ตั้งแต่ 0 ถึง 255 คั่นด้วยจุด
+          เรียกรูปแบบนี้ว่า <b>dotted decimal notation</b>
+        </p>
+        <p class="muted">
+          8 บิตเก็บค่าได้ 2⁸ = 256 ค่า จึงเป็นเหตุผลว่าทำไมเลขในแต่ละช่องถึงเกิน 255 ไม่ได้
+        </p>
+      </article>
+      <article class="card">
+        <h3><span class="ico">✂️</span> Network Part กับ Host Part</h3>
+        <p>
+          IP หนึ่งเลขถูกแบ่งเป็นสองส่วนด้วย <b>Subnet Mask</b> คือส่วนที่บอกว่า “อยู่วงไหน”
+          (network) กับส่วนที่บอกว่า “เป็นเครื่องไหนในวงนั้น” (host)
+        </p>
+        <p class="muted">
+          บิตที่เป็น 1 ในซับเน็ตมาสก์คือส่วน network ส่วนบิตที่เป็น 0 คือส่วน host
+          เขียนย่อเป็น CIDR ได้ เช่น 255.255.255.0 เขียนเป็น /24 เพราะมีบิต 1 อยู่ 24 ตัว
+        </p>
+      </article>
+      <article class="card accent">
+        <h3><span class="ico">🏠</span> Private กับ Public</h3>
+        <p>
+          Private IP ใช้ได้เฉพาะภายในเครือข่ายของเรา ออกอินเทอร์เน็ตตรง ๆ ไม่ได้
+          ต้องให้เราเตอร์ทำ NAT แปลงเป็น Public IP ก่อน
+        </p>
+        <p class="muted">
+          นี่คือเหตุผลที่บ้านคุณกับบ้านเพื่อนใช้ 192.168.1.1 เหมือนกันได้โดยไม่ชนกัน
+        </p>
+      </article>
+    </div>
+
+    <!-- เครื่องมือแปลง IP เป็นเลขฐานสอง -->
+    <div class="tool-card">
+      <h3><span class="ico">🧮</span> เครื่องมือแปลง IP เป็นเลขฐานสอง</h3>
+      <p class="muted">
+        พิมพ์ IP แล้วดูทันทีว่าแต่ละ octet หน้าตาเป็นเลขฐานสองอย่างไร
+        เลือก prefix เพื่อดูซับเน็ตมาสก์ หมายเลขเครือข่าย และช่วง host ที่ใช้ได้
+      </p>
+      <div class="tool-row">
+        <label class="tool-field">
+          <span>IP Address</span>
+          <input type="text" id="ipInput" value="192.168.1.10" spellcheck="false" autocomplete="off" placeholder="เช่น 192.168.1.10">
+        </label>
+        <label class="tool-field small">
+          <span>Prefix (CIDR)</span>
+          <select id="ipPrefix"></select>
+        </label>
+        <div class="tool-presets">
+          <button class="chip" data-ip="192.168.1.10">192.168.1.10</button>
+          <button class="chip" data-ip="10.20.30.40">10.20.30.40</button>
+          <button class="chip" data-ip="172.16.5.1">172.16.5.1</button>
+          <button class="chip" data-ip="8.8.8.8">8.8.8.8</button>
+          <button class="chip" data-ip="169.254.7.7">169.254.7.7</button>
+        </div>
+      </div>
+      <div class="ip-error hidden" id="ipError"></div>
+      <div class="octet-row" id="ipOctets"></div>
+      <div class="ip-summary" id="ipSummary"></div>
+    </div>
+
+    <h2 class="section-title">คลาสของ IPv4 (Class A – E)</h2>
+    <div class="table-wrap">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th style="width:9%">คลาส</th>
+            <th style="width:12%">Octet แรก</th>
+            <th style="width:12%">บิตนำหน้า</th>
+            <th style="width:15%">Default Mask</th>
+            <th style="width:12%">Host ต่อวง</th>
+            <th>ใช้กับอะไร</th>
+          </tr>
+        </thead>
+        <tbody id="ipClassTable"></tbody>
+      </table>
+    </div>
+
+    <div class="card-grid two">
+      <article class="card">
+        <h3><span class="ico">⭐</span> ที่อยู่พิเศษที่ต้องจำ</h3>
+        <ul class="tick" id="ipSpecialList"></ul>
+      </article>
+      <article class="card">
+        <h3><span class="ico">🔒</span> ช่วง Private IP (RFC 1918)</h3>
+        <div class="table-wrap plain">
+          <table>
+            <thead><tr><th>คลาส</th><th>ช่วงที่ใช้ได้</th><th>CIDR</th></tr></thead>
+            <tbody id="privateTable"></tbody>
+          </table>
+        </div>
+      </article>
+    </div>
+
+    <h2 class="section-title">CIDR Notation กับ Subnet Mask</h2>
+    <div class="table-wrap">
+      <table class="cmp-table">
+        <thead><tr><th style="width:12%">CIDR</th><th style="width:26%">Subnet Mask</th><th style="width:20%">Host ที่ใช้ได้จริง</th><th>ใช้ตอนไหน</th></tr></thead>
+        <tbody id="cidrTable"></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">IPv6 — โครงสร้าง 128 บิต</h2>
+    <div class="card-grid" id="ipv6Why"></div>
+
+    <div class="tool-card">
+      <h3><span class="ico">✂️</span> ลองย่อ IPv6 ทีละขั้น</h3>
+      <p class="muted">กดปุ่มเพื่อดูว่าที่อยู่ยาว ๆ ถูกย่อให้สั้นลงได้อย่างไร ทีละกฎ</p>
+      <div class="v6-steps" id="v6Steps"></div>
+      <div class="quiz-actions">
+        <button class="btn" id="v6Prev">◀ ขั้นก่อนหน้า</button>
+        <button class="btn primary" id="v6Next">ขั้นถัดไป ▶</button>
+        <button class="btn ghost" id="v6Reset">↺ เริ่มใหม่</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="cmp-table">
+        <thead><tr><th style="width:20%">ประเภท</th><th style="width:22%">Prefix</th><th>ใช้ทำอะไร</th></tr></thead>
+        <tbody id="ipv6TypeTable"></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">ตารางเทียบ IPv4 กับ IPv6</h2>
+    <div class="table-wrap">
+      <table class="cmp-table">
+        <thead><tr><th style="width:22%">หัวข้อ</th><th>IPv4</th><th>IPv6</th></tr></thead>
+        <tbody id="ipv46Table"></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">MAC Address — ที่อยู่ทางกายภาพ 48 บิต</h2>
+    <p class="section-sub">
+      MAC Address คือหมายเลขประจำตัวของการ์ดแลนแต่ละใบ ถูกฝังมาจากโรงงาน
+      แบ่งครึ่งเป็นสองท่อน ท่อนแรกบอกยี่ห้อ ท่อนหลังบอกว่าเป็นใบที่เท่าไหร่ของยี่ห้อนั้น
+    </p>
+    <div class="mac-struct" id="macStruct"></div>
+
+    <div class="card-grid" id="macFacts"></div>
+
+    <div class="card-grid two">
+      <article class="card">
+        <h3><span class="ico">🏭</span> ตัวอย่าง OUI ที่พบบ่อย</h3>
+        <div class="table-wrap plain">
+          <table>
+            <thead><tr><th style="width:40%">OUI (3 ไบต์แรก)</th><th>ผู้ผลิต</th></tr></thead>
+            <tbody id="ouiTable"></tbody>
+          </table>
+        </div>
+        <p class="muted" style="margin-top:10px">
+          ค้นเพิ่มได้จากทะเบียน OUI ของ IEEE ซึ่งเปิดให้ค้นฟรี เวลาเจอ MAC แปลก ๆ ในเครือข่ายก็เอา 3 ไบต์แรกไปค้นดูได้
+        </p>
+      </article>
+      <article class="card accent">
+        <h3><span class="ico">📮</span> เปรียบเทียบให้เห็นภาพ</h3>
+        <p>
+          ลองนึกว่า <b>IP Address คือที่อยู่บ้าน</b> ที่บอกว่าคุณอยู่จังหวัดไหน เขตไหน
+          ย้ายบ้านเมื่อไหร่ที่อยู่ก็เปลี่ยน ส่วน <b>MAC Address คือเลขบัตรประชาชน</b>
+          ที่ติดตัวคุณไปตลอดไม่ว่าจะย้ายไปอยู่ที่ไหน
+        </p>
+        <p class="muted">
+          บุรุษไปรษณีย์ใช้ที่อยู่บ้าน (IP) หาว่าต้องไปส่งที่ย่านไหน
+          พอถึงหน้าบ้านแล้วจึงเช็กบัตรประชาชน (MAC) ว่าส่งถูกคนไหม
+        </p>
+      </article>
+    </div>
+
+    <h2 class="section-title">ตารางเทียบ MAC Address กับ IP Address</h2>
+    <div class="table-wrap">
+      <table class="cmp-table">
+        <thead><tr><th style="width:20%">หัวข้อ</th><th>MAC Address</th><th>IP Address</th></tr></thead>
+        <tbody id="macIpTable"></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">แบบทดสอบย่อยท้ายบท (5 ข้อ)</h2>
+    <p class="section-sub">ลองวัดความเข้าใจเรื่องที่อยู่ก่อนไปบทต่อไป กดเลือกคำตอบแล้วดูเฉลยได้ทันที</p>
+    <div class="mini-quiz" id="addrQuiz"></div>
+  </section>
+
+  <!-- ===================== 6. NETWORK TYPES & TOPOLOGY ===================== -->
+  <section class="page" id="nettypes">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 6</span>
+      <h1>Network Types &amp; Topology</h1>
+      <p class="lead">
+        แบ่งเครือข่ายได้สองมุม — มุมแรกคือ “ครอบคลุมพื้นที่แค่ไหน” (PAN, LAN, MAN, WAN)
+        อีกมุมคือ “ต่อสายกันแบบไหน” (Bus, Star, Ring, Mesh, Tree)
+      </p>
+    </div>
+
+    <h2 class="section-title">แบ่งตามขนาดพื้นที่</h2>
+    <div class="nt-grid" id="ntGrid"></div>
+
+    <div class="table-wrap">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th style="width:12%">ประเภท</th>
+            <th style="width:22%">พื้นที่ครอบคลุม</th>
+            <th style="width:16%">ความเร็วทั่วไป</th>
+            <th style="width:20%">ใครเป็นเจ้าของ</th>
+            <th>ตัวอย่างการใช้งาน</th>
+          </tr>
+        </thead>
+        <tbody id="ntTable"></tbody>
+      </table>
+    </div>
+
+    <div class="side-note">
+      <b>เทคนิคจำลำดับขนาด:</b> PAN &lt; LAN &lt; CAN &lt; MAN &lt; WAN
+      ยิ่งพื้นที่กว้างขึ้น ความเร็วยิ่งลดลงและดีเลย์ยิ่งสูงขึ้น เพราะข้อมูลต้องเดินทางไกลและผ่านอุปกรณ์มากขึ้น
+      <div class="nt-extra" id="ntExtra"></div>
+    </div>
+
+    <h2 class="section-title">Network Topology — รูปแบบการเชื่อมต่อ</h2>
+    <p class="section-sub">
+      แต่ละผังมีจุดสัญญาณวิ่งอยู่บนเส้น เพื่อให้เห็นว่าข้อมูลเดินทางไปในลักษณะไหน
+      คลิกที่การ์ดเพื่อกางดูข้อดี ข้อเสีย และงานที่เหมาะ
+    </p>
+    <div class="topo-grid" id="topoGrid"></div>
+
+    <h2 class="section-title">ตารางเปรียบเทียบทุก Topology</h2>
+    <div class="table-wrap">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th style="width:14%">Topology</th>
+            <th style="width:13%">ปริมาณสาย</th>
+            <th style="width:12%">ต้นทุน</th>
+            <th style="width:25%">ความทนทานเมื่อเสีย</th>
+            <th style="width:19%">การขยายระบบ</th>
+            <th>การหาจุดเสีย</th>
+          </tr>
+        </thead>
+        <tbody id="topoCompare"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== 7. PROTOCOLS & PORTS ===================== -->
+  <section class="page" id="protocols">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 7</span>
+      <h1>Protocols &amp; Port Numbers</h1>
+      <p class="lead">พิมพ์ค้นหาชื่อโปรโตคอล หมายเลขพอร์ต หรือคำอธิบาย และกรองตามชั้นได้</p>
+    </div>
+
+    <div class="filter-bar">
+      <div class="search-box">
+        <span class="search-ico">🔍</span>
+        <input type="search" id="protoSearch" placeholder="ค้นหา เช่น HTTP, 443, DNS, routing ..." autocomplete="off">
+      </div>
+      <div class="chips" id="layerChips">
+        <button class="chip is-active" data-layer="all">ทุกชั้น</button>
+        <button class="chip" data-layer="7">L7</button>
+        <button class="chip" data-layer="6">L6</button>
+        <button class="chip" data-layer="5">L5</button>
+        <button class="chip" data-layer="4">L4</button>
+        <button class="chip" data-layer="3">L3</button>
+        <button class="chip" data-layer="2">L2</button>
+        <button class="chip" data-layer="1">L1</button>
+      </div>
+    </div>
+
+    <p class="result-count" id="protoCount"></p>
+
+    <div class="table-wrap">
+      <table class="proto-table">
+        <thead>
+          <tr>
+            <th>Protocol</th>
+            <th>ชื่อเต็ม</th>
+            <th>Layer</th>
+            <th>Port</th>
+            <th>Transport</th>
+            <th>คำอธิบาย</th>
+          </tr>
+        </thead>
+        <tbody id="protoBody"></tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">TCP vs UDP — ตารางเทียบที่ต้องจำ</h2>
+    <div class="table-wrap">
+      <table class="cmp-table tcpudp">
+        <thead>
+          <tr><th style="width:24%">หัวข้อ</th><th>TCP</th><th>UDP</th></tr>
+        </thead>
+        <tbody id="tcpUdpBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== 8. QUIZ ===================== -->
+  <section class="page" id="quiz">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 8</span>
+      <h1>แบบทดสอบ</h1>
+      <p class="lead">ตอบทีละข้อ รู้ผลทันทีพร้อมคำอธิบาย จบแล้วดูสรุปคะแนน — สถิติเก็บไว้ในเครื่องคุณเอง</p>
+    </div>
+
+    <!-- หน้าจอเริ่มต้น -->
+    <div class="quiz-panel" id="quizStart">
+      <div class="quiz-hero">
+        <div class="quiz-hero-num" id="quizTotalNum">0</div>
+        <div>
+          <h3>ข้อสอบปรนัยครอบคลุมทุกหัวข้อ</h3>
+          <p class="muted">ชื่อและหน้าที่ของแต่ละชั้น · PDU · โปรโตคอลอยู่ชั้นไหน · อุปกรณ์อยู่ชั้นไหน · TCP เทียบ UDP</p>
+        </div>
+      </div>
+      <div class="stat-row" id="quizStats"><!-- สถิติจาก localStorage --></div>
+      <div class="quiz-opts">
+        <label class="switch">
+          <input type="checkbox" id="shuffleQuiz" checked>
+          <span>สลับลำดับข้อและตัวเลือกทุกครั้ง</span>
+        </label>
+      </div>
+      <button class="btn primary big" id="startQuiz">เริ่มทำแบบทดสอบ</button>
+      <button class="btn ghost" id="clearStats">ล้างสถิติที่บันทึกไว้</button>
+    </div>
+
+    <!-- หน้าจอทำข้อสอบ -->
+    <div class="quiz-panel hidden" id="quizPlay">
+      <div class="quiz-topbar">
+        <span class="q-index" id="qIndex">ข้อ 1 / 20</span>
+        <span class="q-cat" id="qCat">หมวด</span>
+        <span class="q-score" id="qScore">ถูก 0</span>
+      </div>
+      <div class="quiz-bar"><div id="quizBarFill"></div></div>
+
+      <h3 class="q-text" id="qText"></h3>
+      <div class="choices" id="qChoices"></div>
+
+      <div class="feedback hidden" id="qFeedback">
+        <div class="fb-head" id="fbHead"></div>
+        <p id="fbWhy"></p>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn primary" id="nextQ" disabled>ข้อถัดไป →</button>
+        <button class="btn ghost" id="quitQuiz">ออกจากแบบทดสอบ</button>
+      </div>
+    </div>
+
+    <!-- หน้าจอสรุปผล -->
+    <div class="quiz-panel hidden" id="quizResult">
+      <div class="score-ring" id="scoreRing">
+        <div class="score-inner">
+          <div class="score-pct" id="scorePct">0%</div>
+          <div class="score-raw" id="scoreRaw">0 / 0</div>
+        </div>
+      </div>
+      <h3 id="scoreVerdict"></h3>
+      <p class="muted" id="scoreAdvice"></p>
+      <div class="cat-breakdown" id="catBreakdown"></div>
+      <div class="quiz-actions center">
+        <button class="btn primary" id="retryQuiz">ทำใหม่อีกครั้ง</button>
+        <button class="btn" id="reviewWrong">ดูข้อที่ตอบผิด</button>
+        <button class="btn ghost" data-goto="flashcards">ไปทวน Flashcards</button>
+      </div>
+      <div class="wrong-list hidden" id="wrongList"></div>
+    </div>
+  </section>
+
+  <!-- ===================== 9. FLASHCARDS ===================== -->
+  <section class="page" id="flashcards">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 9</span>
+      <h1>Flashcards</h1>
+      <p class="lead">คลิกที่การ์ดเพื่อพลิกดูคำตอบ ใช้ปุ่มลูกศรซ้าย–ขวาบนคีย์บอร์ดเลื่อนการ์ดได้</p>
+    </div>
+
+    <div class="fc-stage">
+      <button class="fc-nav prev" id="fcPrev" aria-label="การ์ดก่อนหน้า">‹</button>
+
+      <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="คลิกเพื่อพลิกการ์ด">
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <span class="fc-tag" id="fcTag"></span>
+            <p id="fcQuestion"></p>
+            <span class="fc-hint">คลิกเพื่อดูคำตอบ</span>
+          </div>
+          <div class="fc-face fc-back">
+            <span class="fc-tag">คำตอบ</span>
+            <p id="fcAnswer"></p>
+            <span class="fc-hint">คลิกเพื่อกลับด้าน</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="fc-nav next" id="fcNext" aria-label="การ์ดถัดไป">›</button>
+    </div>
+
+    <div class="fc-controls">
+      <span class="fc-counter" id="fcCounter">1 / 30</span>
+      <button class="btn" id="fcShuffle">🔀 สุ่มลำดับ</button>
+      <button class="btn ghost" id="fcOrder">↕ เรียงตามเดิม</button>
+      <button class="btn ghost" id="fcFlip">🔄 พลิกการ์ด</button>
+    </div>
+    <div class="fc-progress"><div id="fcProgressFill"></div></div>
+  </section>
+
+  <!-- ===================== 10. CHEAT SHEET ===================== -->
+  <section class="page" id="cheatsheet">
+    <div class="page-head">
+      <span class="eyebrow">บทที่ 10</span>
+      <h1>Cheat Sheet สรุปก่อนสอบ</h1>
+      <p class="lead">ทุกอย่างที่ต้องจำ รวมไว้ในหน้าเดียว กดพิมพ์หรือบันทึกเป็น PDF ได้เลย</p>
+      <button class="btn primary" id="printBtn">🖨️ พิมพ์ / บันทึกเป็น PDF</button>
+    </div>
+
+    <div class="sheet">
+      <h2>ตารางสรุป OSI 7 Layers</h2>
+      <div class="table-wrap">
+        <table class="sheet-table" id="cheatTable">
+          <thead>
+            <tr>
+              <th style="width:16%">Layer</th>
+              <th style="width:13%">PDU</th>
+              <th style="width:23%">หน้าที่ย่อ</th>
+              <th style="width:26%">Protocol ตัวอย่าง</th>
+              <th>Device</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <h2>พอร์ตที่ต้องจำให้ได้</h2>
+      <div class="port-grid" id="portGrid"></div>
+
+      <div class="sheet-cols">
+        <div>
+          <h2>TCP เทียบ UDP แบบสั้น</h2>
+          <ul class="tick" id="cheatTcpUdp"></ul>
+        </div>
+        <div>
+          <h2>สูตรช่วยจำ</h2>
+          <ul class="tick" id="cheatMnemo"></ul>
+        </div>
+      </div>
+
+      <h2>อุปกรณ์เครือข่ายกับชั้นที่สังกัด</h2>
+      <div class="table-wrap">
+        <table class="sheet-table">
+          <thead>
+            <tr>
+              <th style="width:19%">อุปกรณ์</th>
+              <th style="width:9%">Layer</th>
+              <th style="width:28%">จุดเด่นสั้น ๆ</th>
+              <th style="width:22%">Collision Domain</th>
+              <th>Broadcast Domain</th>
+            </tr>
+          </thead>
+          <tbody id="cheatDevices"></tbody>
+        </table>
+      </div>
+
+      <div class="sheet-cols">
+        <div>
+          <h2>ที่อยู่ IP และ MAC</h2>
+          <ul class="tick" id="cheatAddr"></ul>
+        </div>
+        <div>
+          <h2>ประเภทเครือข่ายและ Topology</h2>
+          <ul class="tick" id="cheatNet"></ul>
+          <ul class="tick" id="cheatTopo"></ul>
+        </div>
+      </div>
+
+      <h2>จุดที่มักตอบผิดในห้องสอบ</h2>
+      <ul class="tick warn">
+        <li><b>Switch กับ Router</b> — Switch ใช้ MAC (L2), Router ใช้ IP (L3) อย่าสลับกัน</li>
+        <li><b>PDU ของ UDP</b> — เรียก Datagram ไม่ใช่ Segment (Segment เป็นของ TCP)</li>
+        <li><b>Layer 2 เท่านั้น</b> ที่เติมทั้ง Header และ Trailer</li>
+        <li><b>DNS ใช้ทั้ง UDP และ TCP</b> ที่พอร์ต 53 ไม่ใช่ UDP อย่างเดียว</li>
+        <li><b>FTP</b> พอร์ต 21 คือคำสั่ง พอร์ต 20 คือข้อมูล อย่าจำสลับ</li>
+        <li><b>TCP/IP ไม่มีชั้น Session และ Presentation</b> เพราะถูกยุบรวมเข้าไปในชั้น Application</li>
+        <li><b>ARP</b> ตำราส่วนใหญ่จัดไว้ที่ L2 หรือคาบเกี่ยว L2–L3 ให้ดูบริบทของข้อสอบ</li>
+        <li><b>Switch แยก collision domain ได้ แต่หยุด broadcast ไม่ได้</b> — มีแต่ Router ที่หยุดได้</li>
+        <li><b>Access Point อยู่ Layer 2</b> ไม่ใช่ Layer 1 เพราะมันอ่านและส่งต่อด้วย MAC Address</li>
+        <li><b>MAC เปลี่ยนทุก hop / IP คงเดิมตลอดทาง</b> อย่าตอบสลับกันเด็ดขาด</li>
+        <li><b>169.254.x.x</b> ไม่ใช่ Private IP ปกติ แต่แปลว่า DHCP มีปัญหา</li>
+        <li><b>Full Mesh ใช้สาย n(n−1)/2 เส้น</b> ไม่ใช่ n เส้น</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>สร้างขึ้นเพื่อใช้ติวสอบวิชา Computer Networks · ทำงานแบบ static ล้วน ไม่ต้องต่อเซิร์ฟเวอร์</p>
+</footer>
+
+<!-- โหลดไฟล์ข้อมูลก่อน แล้วค่อยโหลด logic -->
+<script src="data.js"></script>
+<script src="devices.js"></script>
+<script src="addressing.js"></script>
+<script src="topology.js"></script>
+<script src="encap.js"></script>
+<script src="quiz.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

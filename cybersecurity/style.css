@@ -1012,6 +1012,137 @@ td.lcell { font-weight: 600; border-left: 5px solid var(--lc, var(--accent)); }
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
 
+
+/* =========================================================================
+   16) มือถือ / จอแคบ — เพิ่มเข้ามาภายหลัง ไม่แตะสไตล์ของ desktop
+   ใช้ `@media screen and (...)` เพื่อไม่ให้ไปทับบล็อก @media print ข้างล่าง
+   ========================================================================= */
+
+/* ---------- 16.1) ตาราง → การ์ดแบบ label/value ----------
+   บนจอ 375px ตารางเดิมเลื่อนแนวนอนได้ก็จริง แต่คอลัมน์ที่ 3 ขึ้นไปหายลับขอบจอ
+   โดยไม่มีอะไรบอกว่าเลื่อนได้ ผู้ใช้จึงพลาดเนื้อหาไปครึ่งตาราง
+   จอแคบเลยเปลี่ยนเป็น "หนึ่งแถว = หนึ่งการ์ด" แทน:
+   เซลล์แรกเป็นหัวการ์ด ที่เหลือแสดงเป็น ชื่อคอลัมน์ + ค่า เรียงลงมา
+   (ชื่อคอลัมน์มาจาก data-label ที่ shared/responsive-tables.js ติดไว้ให้) */
+@media screen and (max-width: 768px) {
+  /* ปรับเฉพาะกรอบที่ข้างในแปลงเป็นการ์ดได้จริง — ถ้าสคริปต์ไม่ทำงาน
+     ตารางจะยังอยู่ในกรอบเลื่อนแนวนอนแบบเดิม ไม่ล้นจอ */
+  .table-wrap:has(table.has-labels) {
+    overflow-x: visible;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+  .table-wrap table.has-labels {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    background: none;
+    font-size: .92rem;
+  }
+  .has-labels thead { display: none; }
+  .has-labels tbody { display: block; }
+
+  .has-labels tbody tr {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .has-labels tbody tr:last-child { margin-bottom: 0; }
+
+  .has-labels tbody td {
+    display: block;
+    width: auto;
+    border-bottom: 0;
+    padding: 9px 14px;
+  }
+
+  /* เซลล์แรก = หัวการ์ด */
+  .has-labels tbody td:first-child {
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* เซลล์ที่เหลือ = ชื่อคอลัมน์กำกับไว้ข้างบนค่า */
+  .has-labels tbody td:not(:first-child)::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .has-labels tbody td:not(:first-child) + td { border-top: 1px dashed var(--border); }
+
+  /* td ที่ยังไม่มี data-label (เช่นสคริปต์ยังไม่ทำงาน) ไม่ต้องขึ้นหัวลอย ๆ */
+  .has-labels tbody td:not([data-label])::before { content: none; }
+
+}
+
+/* ---------- 16.2) Diagram พื้นที่ผิวการโจมตี → กริด ----------
+   เดิมวางจุดด้วยพิกัด % รอบวงกลม พอกล่องแคบลงเหลือ ~345px
+   จุดที่อยู่ริม (x=6%, x=94%, y=95%) จะโดน overflow:hidden ตัดป้ายชื่อขาด
+   จอแคบจึงเลิกใช้พิกัด เปลี่ยนเป็นกริด 3 คอลัมน์ โดยดัน "ระบบภายในองค์กร"
+   (จุด core) ขึ้นไปไว้กลางแถวแรก ให้ยังอ่านความหมายว่าเป็นศูนย์กลางได้
+   การคลิกเพื่อดูรายละเอียดยังทำงานเหมือนเดิมทุกอย่าง
+
+   ใช้ 900px ไม่ใช่ 768px เพราะการตัดป้ายเกิดขึ้นจนถึงจอราว 855px
+   (ป้ายกว้าง 96px วางที่ x=6%/94% ต้องการกล่องกว้าง >= 800px ถึงจะพอดี)
+   และ 900px คือจุดที่เว็บนี้สลับหัวเว็บเป็นเมนูแฮมเบอร์เกอร์อยู่แล้ว */
+@media screen and (max-width: 900px) {
+  .surface-map {
+    position: static;
+    aspect-ratio: auto;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px 4px;
+    padding: 18px 10px;
+  }
+  .surface-map .ring { display: none; }
+
+  .surface-point {
+    position: static;
+    transform: none;
+    width: auto;
+    padding: 0 2px;
+  }
+  .surface-point .lbl { font-size: .66rem; overflow-wrap: anywhere; }
+  .surface-point:hover .dot,
+  .surface-point.is-active .dot { transform: scale(1.08); }
+
+  /* จุดศูนย์กลางขึ้นเป็นแถวแรกเต็มความกว้าง แล้วจุดรอบ ๆ เรียงต่อข้างล่าง
+     สื่อความหมายเดิมได้ว่า "นี่คือเป้าหมาย ส่วนที่เหลือคือทางเข้า" */
+  .surface-point.risk-core {
+    order: -1;
+    grid-column: 1 / -1;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .surface-point.risk-core .dot { width: 54px; height: 54px; font-size: 1.5rem; }
+}
+
+/* ---------- 16.3) DMZ diagram ----------
+   script.js ตั้ง gridTemplateColumns เป็น inline style ("1fr auto 1fr auto…")
+   ซึ่งกินน้ำหนักมากกว่า @media ปกติ ทำให้ 4 โซนยังเรียงแนวนอนบนมือถือ
+   และล้นขอบจอไป ~240px ตรงนี้เลยต้อง !important เพื่อทับ inline style */
+@media screen and (max-width: 768px) {
+  .dmz-diagram { grid-template-columns: 1fr !important; }
+  .dmz-wall {
+    writing-mode: horizontal-tb;
+    padding: 2px 0;
+    font-size: .74rem;
+  }
+  .dmz-rule .path { min-width: 0; }
+  .dmz-rule .txt { min-width: 0; }
+}
+
 /* ---------- สไตล์ตอนสั่งพิมพ์ / บันทึกเป็น PDF ---------- */
 @media print {
   .site-header, .site-footer, .progress-track, #printBtn { display: none !important; }

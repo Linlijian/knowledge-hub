@@ -1064,3 +1064,74 @@ tbody tr:hover { background: var(--surface-2); }
   .lbadge { border: 1px solid #999; color: #000 !important; background: #eee !important; }
   .sheet-table td.lcell { border-left: 4px solid #666 !important; }
 }
+
+/* =========================================================================
+   17) มือถือ / จอแคบ — เพิ่มเข้ามาภายหลัง ไม่แตะสไตล์ของ desktop
+   ใช้ `@media screen and (...)` เพื่อไม่ให้ไปทับบล็อก @media print
+   ========================================================================= */
+
+/* ---------- 17.1) ตาราง → การ์ดแบบ label/value ----------
+   ตาราง 13 จาก 16 อันกว้างเกินจอมือถือ (สูงสุด 616px บนจอ 345px)
+   ของเดิมเลื่อนแนวนอนได้ แต่คอลัมน์ท้าย ๆ หายลับขอบจอโดยไม่มีสัญญาณบอก
+   จอแคบจึงเปลี่ยนเป็น "หนึ่งแถว = หนึ่งการ์ด" เซลล์แรกเป็นหัวการ์ด
+   ที่เหลือแสดงเป็น ชื่อคอลัมน์ + ค่า เรียงลงมา อ่านได้ครบโดยไม่ต้องเลื่อน
+   (ชื่อคอลัมน์มาจาก data-label ที่ shared/responsive-tables.js ติดไว้ให้
+    ตารางที่ไม่มี <thead> เช่น .fields-tbl จะไม่ถูกแปลง ยังเป็นตารางปกติ) */
+@media screen and (max-width: 768px) {
+  .table-wrap:has(table.has-labels) {
+    overflow-x: visible;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+  .table-wrap table.has-labels {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    background: none;
+    font-size: .92rem;
+  }
+  .has-labels thead { display: none; }
+  .has-labels tbody { display: block; }
+
+  .has-labels tbody tr {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .has-labels tbody tr:last-child { margin-bottom: 0; }
+
+  .has-labels tbody td {
+    display: block;
+    width: auto;
+    border-bottom: 0;
+    padding: 9px 14px;
+    white-space: normal;
+  }
+
+  /* เซลล์แรก = หัวการ์ด */
+  .has-labels tbody td:first-child {
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  /* ตารางสรุปในหน้า Cheat Sheet มีแถบสีประจำชั้น OSI อยู่แล้ว — คงไว้บนหัวการ์ด */
+  .sheet-table.has-labels tbody td.lcell { border-left: 5px solid var(--lc); }
+
+  /* เซลล์ที่เหลือ = ชื่อคอลัมน์กำกับไว้ข้างบนค่า */
+  .has-labels tbody td:not(:first-child)::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .has-labels tbody td:not(:first-child) + td { border-top: 1px dashed var(--border); }
+  .has-labels tbody td:not([data-label])::before { content: none; }
+}
